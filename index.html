@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDGE AI — Intelligence, Where Data Happens</title>
+    <meta name="description" content="Edge AI brings machine intelligence closer to devices creating data. Explore real browser-based local inference, interactive architecture, and an Edge + Cloud framework.">
+    <meta property="og:title" content="EDGE AI — Intelligence, Where Data Happens">
+    <meta property="og:description" content="Real local AI inference in your browser. Explore Edge AI architecture, applications, and the Edge + Cloud model.">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%233B82F6'/><text x='16' y='22' font-family='Inter,Arial,sans-serif' font-size='16' font-weight='700' text-anchor='middle' fill='%230A0E15'>E</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0E15;
+            --surface: #111722;
+            --surface-elevated: #172030;
+            --surface-hover: #1C2738;
+            --text-primary: #F2F5F9;
+            --text-secondary: #A0AEC0;
+            --text-muted: #64748B;
+            --accent: #3B82F6;
+            --accent-dim: rgba(59, 130, 246, 0.12);
+            --accent-glow: rgba(59, 130, 246, 0.35);
+            --border: #1E293B;
+            --border-light: #2D3A4F;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+            --nav-bg: rgba(10, 14, 21, 0.85);
+            --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --font-heading: 'Sora', sans-serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --transition-fast: 180ms ease;
+            --transition-base: 280ms ease;
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            --max-width: 1200px;
+            --nav-height: 64px;
+        }
+        [data-theme="light"] {
+            --bg: #F8FAFC;
+            --surface: #FFFFFF;
+            --surface-elevated: #F1F5F9;
+            --surface-hover: #E2E8F0;
+            --text-primary: #0F172A;
+            --text-secondary: #334155;
+            --text-muted: #64748B;
+            --accent: #2563EB;
+            --accent-dim: rgba(37, 99, 235, 0.08);
+            --accent-glow: rgba(37, 99, 235, 0.2);
+            --border: #CBD5E1;
+            --border-light: #94A3B8;
+            --nav-bg: rgba(248, 250, 252, 0.88);
+            --nav-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --success: #059669;
+            --warning: #D97706;
+            --error: #DC2626;
+        }
+
+        *,
+        *::before,
+        *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: calc(var(--nav-height) + 16px);
+            -webkit-text-size-adjust: 100%;
+        }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 16px;
+            z-index: 10000;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            text-decoration: none;
+            transition: top var(--transition-fast);
+        }
+        .skip-link:focus { top: 16px; }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-label::before {
+            content: '';
+            width: 24px;
+            height: 2px;
+            background: var(--accent);
+            display: block;
+        }
+        h2.section-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin-bottom: 16px;
+        }
+        h3.sub-title {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            margin-bottom: 12px;
+        }
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            max-width: 640px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        @media (max-width: 430px) { .container { padding: 0 16px; } }
+        section { padding: 80px 0; position: relative; }
+        @media (max-width: 768px) { section { padding: 56px 0; } }
+
+        /* ============ NAVBAR ============ */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 9000;
+            height: var(--nav-height);
+            display: flex;
+            align-items: center;
+            background: transparent;
+            transition: background 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+            border-bottom: 1px solid transparent;
+        }
+        .navbar.scrolled {
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--nav-shadow);
+        }
+        .navbar-inner {
+            display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 24px; gap: 16px;
+        }
+        .nav-brand {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.4rem;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap;
+        }
+        .nav-brand .brand-dot {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        .nav-links {
+            display: flex; align-items: center; gap: 4px; list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem; font-weight: 500;
+            padding: 8px 14px;
+            border-radius: var(--radius-sm);
+            transition: color var(--transition-fast), background var(--transition-fast);
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--text-primary); background: var(--surface-hover); }
+        .nav-links a.active { color: var(--accent); background: var(--accent-dim); }
+        .nav-actions { display: flex; align-items: center; gap: 8px; }
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 0.85rem;
+            font-family: var(--font-body);
+            cursor: pointer; border: none;
+            transition: all var(--transition-fast);
+            text-decoration: none; letter-spacing: 0.01em;
+            min-height: 40px; line-height: 1.2;
+        }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { box-shadow: 0 4px 20px var(--accent-glow); transform: translateY(-1px); }
+        .btn-secondary { background: transparent; color: var(--text-primary); border: 1px solid var(--border-light); }
+        .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .btn-ghost { background: var(--surface-elevated); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-ghost:hover { border-color: var(--border-light); background: var(--surface-hover); }
+        .btn-danger { background: var(--error); color: #fff; }
+        .btn-danger:hover { opacity: 0.9; }
+        .btn-sm { padding: 8px 14px; font-size: 0.75rem; min-height: 34px; }
+        .btn-lg { padding: 14px 28px; font-size: 1rem; min-height: 52px; border-radius: var(--radius-md); }
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+        .icon-btn {
+            width: 40px; height: 40px; border-radius: var(--radius-sm);
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-secondary);
+            display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all var(--transition-fast); flex-shrink: 0;
+        }
+        .icon-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .hamburger { display: none; }
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .hamburger { display: inline-flex; }
+            .nav-actions .btn-primary.nav-demo-btn { display: none; }
+        }
+        @media (max-width: 430px) { .navbar-inner { padding: 0 16px; } }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%;
+            width: min(320px, 85vw); height: 100vh;
+            background: var(--surface); border-left: 1px solid var(--border);
+            z-index: 9500; padding: 24px;
+            display: flex; flex-direction: column; gap: 8px;
+            transition: right var(--transition-slow);
+            box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+        }
+        .mobile-menu.open { right: 0; }
+        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .mobile-menu-header .nav-brand { font-size: 1.2rem; }
+        .mobile-menu a {
+            color: var(--text-secondary); text-decoration: none;
+            font-weight: 500; font-size: 0.95rem;
+            padding: 12px 16px; border-radius: var(--radius-sm);
+            transition: all var(--transition-fast); display: block;
+        }
+        .mobile-menu a:hover { color: var(--text-primary); background: var(--surface-hover); }
+        .mobile-menu a.active { color: var(--accent); background: var(--accent-dim); }
+        .mobile-menu .mobile-demo-btn { margin-top: 16px; }
+        .mobile-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            z-index: 9400; opacity: 0; pointer-events: none;
+            transition: opacity var(--transition-base);
+        }
+        .mobile-overlay.visible { opacity: 1; pointer-events: all; }
+
+        /* ============ HERO ============ */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding-top: calc(var(--nav-height) + 32px); padding-bottom: 64px;
+            position: relative; overflow: hidden;
+        }
+        .hero::after {
+            content: ''; position: absolute; top: -20%; right: -10%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+            pointer-events: none; z-index: 0;
+        }
+        .hero .container {
+            position: relative; z-index: 1;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+        }
+        .hero-copy h1 {
+            font-size: clamp(2.4rem, 6vw, 4rem);
+            line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 20px;
+        }
+        .hero-copy .accent-text { color: var(--accent); }
+        .hero-copy p {
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            max-width: 520px; line-height: 1.75; margin-bottom: 28px;
+        }
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+        .hero-visual { display: flex; flex-direction: column; gap: 16px; }
+        .diagram-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 20px;
+            transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease;
+        }
+        .diagram-card:hover { border-color: var(--border-light); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+        .diagram-card .diagram-title {
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+        }
+        .diagram-card.edge-highlight .diagram-title { color: var(--accent); }
+        .diagram-card.edge-highlight { border-color: var(--accent); box-shadow: 0 0 32px var(--accent-dim); }
+
+        .flow-diagram { width: 100%; height: auto; min-height: 100px; }
+        .flow-node { fill: var(--surface-elevated); stroke: var(--border-light); stroke-width: 1; rx: 6; }
+        .flow-node.active-node { fill: var(--accent-dim); stroke: var(--accent); }
+        .flow-label { fill: var(--text-secondary); font-size: 11px; font-family: var(--font-mono); text-anchor: middle; }
+        .flow-arrow { stroke: var(--border-light); stroke-width: 1.5; fill: none; }
+        .flow-dot { fill: var(--accent); opacity: 0; }
+        .flow-dot.animate { animation: flow-dot-anim 3s ease-in-out infinite; }
+        @keyframes flow-dot-anim {
+            0% { opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } 100% { opacity: 0; }
+        }
+        @media (max-width: 900px) {
+            .hero .container { grid-template-columns: 1fr; gap: 32px; }
+            .hero { min-height: auto; padding-top: calc(var(--nav-height) + 24px); }
+            .hero-visual { order: 2; }
+        }
+
+        /* ============ EXPLANATION ============ */
+        .explanation-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-lg); padding: 32px; max-width: 720px; margin: 0 auto;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        .explanation-card p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; }
+        .highlight-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .highlight-chip {
+            font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-secondary); background: var(--surface-elevated);
+            border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px;
+            transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease;
+        }
+        .highlight-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ============ CLOUD VS EDGE ============ */
+        .comparison-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .comparison-tab {
+            padding: 10px 20px; font-weight: 600; font-size: 0.9rem;
+            background: transparent; border: none; cursor: pointer;
+            color: var(--text-muted); border-radius: var(--radius-sm);
+            transition: all var(--transition-fast); font-family: var(--font-body);
+        }
+        .comparison-tab:hover { color: var(--text-primary); background: var(--surface-hover); }
+        .comparison-tab.active { color: var(--text-primary); background: var(--surface-elevated); border-bottom: 2px solid var(--accent); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+        .comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+        .comparison-item {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 16px 20px;
+            display: flex; flex-direction: column; gap: 4px;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        .comparison-item .ci-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-family: var(--font-mono); }
+        .comparison-item .ci-value { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
+        .comparison-item .ci-detail { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+        .comparison-summary {
+            margin-top: 20px; padding: 16px 20px;
+            background: var(--accent-dim); border: 1px solid var(--accent);
+            border-radius: var(--radius-md); text-align: center;
+            font-weight: 600; color: var(--text-primary); font-size: 1.05rem;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+
+        /* ============ LIVE DEMO ============ */
+        .demo-wrapper { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 20px; align-items: start; }
+        @media (max-width: 900px) { .demo-wrapper { grid-template-columns: 1fr; } }
+        .camera-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; position: relative; transition: background 0.4s ease, border-color 0.4s ease; }
+        .camera-viewport { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #000; overflow: hidden; }
+        .camera-viewport video, .camera-viewport canvas {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100%; height: 100%; object-fit: contain;
+        }
+        .camera-viewport canvas { z-index: 2; pointer-events: none; }
+        .camera-overlay {
+            position: absolute; inset: 0; z-index: 3;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; padding: 24px;
+            background: rgba(10, 14, 21, 0.75);
+            backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+            transition: opacity var(--transition-base);
+        }
+        .camera-overlay.hidden { opacity: 0; pointer-events: none; }
+        .camera-overlay .co-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .camera-overlay h4 { font-size: 1.05rem; margin-bottom: 8px; }
+        .camera-overlay p { font-size: 0.9rem; color: var(--text-secondary); max-width: 280px; margin-bottom: 16px; }
+        .camera-overlay .co-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .demo-status-bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--surface-elevated); border-top: 1px solid var(--border); gap: 8px; flex-wrap: wrap; transition: background 0.4s ease, border-color 0.4s ease; }
+        .local-inference-indicator { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--success); }
+        .local-inference-indicator .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); animation: pulse-dot-green 1.5s ease-in-out infinite; }
+        @keyframes pulse-dot-green {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        }
+        .demo-controls { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--surface); transition: background 0.4s ease, border-color 0.4s ease; }
+        .side-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; display: flex; flex-direction: column; gap: 16px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .side-panel h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-family: var(--font-mono); margin-bottom: 4px; }
+        .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .metric-card { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .metric-card .mc-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); font-family: var(--font-mono); }
+        .metric-card .mc-value { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-top: 2px; }
+        .metric-card .mc-note { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
+        .loading-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+        .loading-step { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-muted); transition: all var(--transition-fast); }
+        .loading-step.done { color: var(--text-primary); }
+        .loading-step.done .step-indicator { background: var(--success); border-color: var(--success); color: #fff; }
+        .loading-step.active { color: var(--accent); }
+        .loading-step.active .step-indicator { border-color: var(--accent); color: var(--accent); animation: spin 1s linear infinite; }
+        .step-indicator { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border-light); display: inline-flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; flex-shrink: 0; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-box { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--error); border-radius: var(--radius-sm); padding: 12px 16px; font-size: 0.85rem; color: var(--error); margin-top: 8px; line-height: 1.5; }
+        .simulation-label { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--warning); background: rgba(245, 158, 11, 0.1); border: 1px solid var(--warning); border-radius: 4px; padding: 4px 8px; display: inline-block; }
+
+        .data-path-viz { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+        @media (max-width: 700px) { .data-path-viz { grid-template-columns: 1fr; } }
+        .data-path-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 20px; display: flex; flex-direction: column; gap: 6px; transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease; }
+        .data-path-card.local-active { border-color: var(--success); box-shadow: 0 0 24px rgba(16, 185, 129, 0.15); }
+        .data-path-card .dpc-title { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em; font-family: var(--font-mono); }
+        .data-path-card.local-active .dpc-title { color: var(--success); }
+        .data-path-card .dpc-flow { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px; line-height: 1.6; }
+        .data-path-card .dpc-flow .flow-arrow-char { color: var(--text-muted); }
+
+        /* ============ WHY EDGE AI ============ */
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+        .why-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; cursor: pointer; transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease; position: relative; }
+        .why-card:hover { border-color: var(--border-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+        .why-card .why-icon { font-size: 1.5rem; margin-bottom: 12px; display: block; }
+        .why-card h3 { font-size: 1rem; margin-bottom: 8px; }
+        .why-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+        .why-card .why-visual-dot { position: absolute; bottom: 16px; right: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--border-light); transition: all var(--transition-base); }
+        .why-card:hover .why-visual-dot { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+
+        /* ============ ARCHITECTURE ============ */
+        .arch-pipeline { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 24px 0; justify-content: center; }
+        .arch-stage { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 18px; cursor: pointer; text-align: center; font-weight: 600; font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; min-width: 100px; user-select: none; }
+        .arch-stage:hover { border-color: var(--border-light); color: var(--text-primary); }
+        .arch-stage.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); box-shadow: 0 0 16px var(--accent-dim); }
+        .arch-arrow { color: var(--text-muted); font-weight: 700; font-size: 1.2rem; user-select: none; }
+        .arch-detail { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; min-height: 80px; text-align: center; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6; transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease; }
+        .arch-detail strong { color: var(--text-primary); }
+
+        .edge-cloud-split { display: grid; grid-template-columns: 1fr auto 1fr; gap: 20px; align-items: center; margin: 24px 0; }
+        @media (max-width: 700px) { .edge-cloud-split { grid-template-columns: 1fr; gap: 12px; } .edge-cloud-plus { text-align: center; font-size: 1.5rem; font-weight: 700; color: var(--accent); } }
+        .edge-cloud-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .edge-cloud-panel h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono); margin-bottom: 12px; }
+        .edge-cloud-panel ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .edge-cloud-panel li { font-size: 0.85rem; color: var(--text-secondary); padding-left: 16px; position: relative; line-height: 1.5; }
+        .edge-cloud-panel li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+        .edge-cloud-plus { font-size: 2rem; font-weight: 700; color: var(--text-muted); text-align: center; }
+        @media (min-width: 701px) { .edge-cloud-plus { font-size: 1.8rem; } }
+
+        .lifecycle-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 20px 0; justify-content: center; }
+        .lifecycle-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 16px; cursor: pointer; font-weight: 600; font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; user-select: none; }
+        .lifecycle-step:hover { border-color: var(--border-light); color: var(--text-primary); }
+        .lifecycle-step.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .lifecycle-detail { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 22px; text-align: center; color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6; min-height: 60px; transition: background 0.4s ease, border-color 0.4s ease; }
+
+        /* ============ APPLICATIONS ============ */
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+        .app-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px; cursor: pointer; transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease; }
+        .app-card:hover { border-color: var(--border-light); background: var(--surface-hover); }
+        .app-card.active { border-color: var(--accent); background: var(--accent-dim); }
+        .app-card .app-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+        .app-card .app-summary { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; display: none; }
+        .app-card.active .app-summary { display: block; }
+        .app-card .app-chevron { float: right; color: var(--text-muted); transition: transform var(--transition-fast); }
+        .app-card.active .app-chevron { transform: rotate(180deg); color: var(--accent); }
+
+        /* Device Explorer */
+        .device-categories { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+        .device-cat-btn { padding: 8px 16px; border-radius: 20px; background: var(--surface-elevated); border: 1px solid var(--border); font-weight: 500; font-size: 0.78rem; cursor: pointer; color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; font-family: var(--font-body); }
+        .device-cat-btn:hover { border-color: var(--border-light); color: var(--text-primary); }
+        .device-cat-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .device-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .device-chip { padding: 8px 14px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); cursor: pointer; font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; font-family: var(--font-body); }
+        .device-chip:hover { border-color: var(--border-light); color: var(--text-primary); }
+        .device-chip.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .device-detail { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary); transition: background 0.4s ease, border-color 0.4s ease; }
+        .device-detail strong { color: var(--text-primary); }
+        .device-flow { font-family: var(--font-mono); font-size: 0.8rem; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; color: var(--text-secondary); }
+        .device-flow .flow-sep { color: var(--accent); font-weight: 700; }
+
+        /* Decision Tool */
+        .decision-questions { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .dq-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .dq-item .dq-question { font-weight: 600; font-size: 0.9rem; flex: 1; min-width: 200px; }
+        .dq-options { display: flex; gap: 6px; }
+        .dq-btn { padding: 6px 14px; border-radius: 16px; background: transparent; border: 1px solid var(--border-light); cursor: pointer; font-size: 0.78rem; font-weight: 500; color: var(--text-secondary); transition: all var(--transition-fast); font-family: var(--font-body); }
+        .dq-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .dq-btn.active { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+        .decision-result { background: var(--surface-elevated); border: 1px solid var(--accent); border-radius: var(--radius-md); padding: 24px; text-align: center; margin-top: 16px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .decision-result .dr-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; font-family: var(--font-mono); color: var(--text-muted); }
+        .decision-result .dr-value { font-size: 1.8rem; font-weight: 800; margin: 8px 0; }
+        .decision-result .dr-value.edge { color: var(--success); }
+        .decision-result .dr-value.cloud { color: var(--accent); }
+        .decision-result .dr-value.hybrid { color: var(--warning); }
+        .decision-result .dr-explanation { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; max-width: 400px; margin: 0 auto; }
+        .decision-disclaimer { font-size: 0.72rem; color: var(--text-muted); text-align: center; margin-top: 8px; font-family: var(--font-mono); }
+
+        /* ============ GALLERY ============ */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .gallery-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all var(--transition-base), background 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+        .gallery-item:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+        .gallery-image {
+            width: 100%;
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: transform 0.4s ease;
+            background-color: var(--surface-elevated);
+        }
+        .gallery-item:hover .gallery-image { transform: scale(1.03); }
+        .gallery-caption {
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        .gallery-caption small {
+            display: block;
+            font-weight: 400;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        /* ============ CONTACT ============ */
+        .contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            max-width: 720px;
+            margin: 0 auto;
+            transition: background 0.4s ease, border-color 0.4s ease;
+        }
+        .contact-form { display: flex; flex-direction: column; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-weight: 600; font-size: 0.85rem; color: var(--text-primary); }
+        .form-group input, .form-group textarea {
+            background: var(--surface-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease;
+            resize: vertical;
+            width: 100%;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+        .contact-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+        .contact-actions .btn { flex: 1; min-width: 150px; }
+        .form-success-message {
+            display: none;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        /* ============ TECHNOLOGY DEEP DIVE ============ */
+        .dd-accordion { display: flex; flex-direction: column; gap: 8px; max-width: 800px; }
+        .dd-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; }
+        .dd-item.open { border-color: var(--border-light); }
+        .dd-trigger { width: 100%; padding: 16px 20px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--font-body); font-weight: 600; font-size: 0.9rem; color: var(--text-primary); transition: all var(--transition-fast); text-align: left; }
+        .dd-trigger:hover { background: var(--surface-hover); }
+        .dd-trigger .dd-chevron { color: var(--text-muted); font-size: 0.7rem; transition: transform var(--transition-fast); flex-shrink: 0; }
+        .dd-item.open .dd-chevron { transform: rotate(180deg); color: var(--accent); }
+        .dd-content { max-height: 0; overflow: hidden; transition: max-height var(--transition-slow); }
+        .dd-item.open .dd-content { max-height: 400px; }
+        .dd-content-inner { padding: 0 20px 20px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+        .dd-content-inner .dd-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono); color: var(--text-muted); margin-top: 10px; display: block; }
+
+        /* Stack layers */
+        .stack-container { display: flex; flex-direction: column; gap: 6px; max-width: 500px; margin: 20px auto; }
+        .stack-layer { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 18px; cursor: pointer; text-align: center; font-weight: 600; font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; }
+        .stack-layer:hover { border-color: var(--border-light); color: var(--text-primary); }
+        .stack-layer.active { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .stack-detail { background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 0.82rem; color: var(--text-secondary); text-align: center; line-height: 1.6; min-height: 50px; transition: background 0.4s ease, border-color 0.4s ease; }
+
+        /* Model lifecycle */
+        .model-lifecycle { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin: 20px 0; }
+        .ml-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; font-size: 0.78rem; font-weight: 600; font-family: var(--font-mono); color: var(--text-secondary); transition: all var(--transition-fast), background 0.4s ease, border-color 0.4s ease; cursor: default; }
+        .ml-step:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+        /* Production */
+        .production-flow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: center; margin: 20px 0; font-family: var(--font-mono); font-size: 0.82rem; }
+        .prod-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 20px; text-align: center; transition: background 0.4s ease, border-color 0.4s ease; }
+        .prod-box .pb-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+        .prod-box .pb-value { font-weight: 700; font-size: 0.9rem; color: var(--text-primary); margin-top: 4px; }
+        .prod-arrow { color: var(--accent); font-weight: 700; }
+
+        /* Security */
+        .security-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .security-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; transition: background 0.4s ease, border-color 0.4s ease; }
+        .security-item strong { display: block; color: var(--text-primary); margin-bottom: 4px; font-size: 0.85rem; }
+
+        /* ============ VISION ============ */
+        .vision-visual { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin: 24px 0; font-family: var(--font-mono); font-size: 0.82rem; }
+        .vision-node { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 16px; font-weight: 600; color: var(--text-secondary); transition: background 0.4s ease, border-color 0.4s ease; }
+        .vision-node.accent { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+        .vision-arrow { color: var(--text-muted); font-weight: 700; }
+
+        /* Prototype boundaries */
+        .boundary-note { background: var(--surface); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 20px 24px; max-width: 720px; margin: 0 auto; font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; text-align: center; transition: background 0.4s ease, border-color 0.4s ease; }
+        .boundary-note strong { color: var(--text-primary); }
+
+        /* ============ DEMO MODE ============ */
+        .demo-mode-overlay { position: fixed; inset: 0; z-index: 9800; background: var(--bg); display: none; flex-direction: column; }
+        .demo-mode-overlay.active { display: flex; }
+        .demo-mode-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .demo-mode-header .dm-title { font-weight: 700; font-size: 1rem; letter-spacing: 0.02em; font-family: var(--font-heading); }
+        .demo-mode-header .dm-progress { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); }
+        .demo-mode-body { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; overflow-y: auto; text-align: center; }
+        .demo-mode-slide { max-width: 720px; animation: slide-fade-in 0.4s ease; }
+        @keyframes slide-fade-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .demo-mode-slide .dm-slide-label { font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); }
+        .demo-mode-slide h2 { font-size: clamp(1.8rem, 5vw, 2.8rem); margin: 12px 0 20px; }
+        .demo-mode-slide .dm-slide-content { font-size: clamp(1rem, 2.5vw, 1.2rem); color: var(--text-secondary); line-height: 1.8; margin-bottom: 20px; }
+        .demo-mode-slide .dm-slide-content strong { color: var(--text-primary); }
+        .demo-mode-footer { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; border-top: 1px solid var(--border); gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
+        .demo-mode-footer .dm-nav-btns { display: flex; gap: 8px; }
+        .dm-hint { font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+        /* Floating demo mode button */
+        .floating-demo-btn { position: fixed; bottom: 24px; right: 24px; z-index: 8000; background: var(--accent); color: #fff; padding: 12px 20px; border-radius: 40px; font-weight: 700; font-size: 0.8rem; cursor: pointer; border: none; box-shadow: 0 8px 32px var(--accent-glow); transition: all var(--transition-base); font-family: var(--font-body); letter-spacing: 0.02em; display: flex; align-items: center; gap: 6px; }
+        .floating-demo-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px var(--accent-glow); }
+        @media (max-width: 768px) { .floating-demo-btn { bottom: 16px; right: 16px; padding: 10px 16px; font-size: 0.7rem; } }
+
+        /* ============ FOOTER ============ */
+        footer { background: var(--surface); border-top: 1px solid var(--border); padding: 48px 0 32px; margin-top: 40px; transition: background 0.4s ease, border-color 0.4s ease; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+        @media (max-width: 700px) { .footer-grid { grid-template-columns: 1fr; } }
+        .footer-brand { font-family: var(--font-heading); font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .footer-brand .brand-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+        .footer-tagline { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 8px; }
+        .footer-disclaimer { font-size: 0.75rem; color: var(--text-muted); max-width: 400px; line-height: 1.6; }
+        .footer-links h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px; font-family: var(--font-mono); }
+        .footer-links a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; padding: 4px 0; transition: color var(--transition-fast); }
+        .footer-links a:hover { color: var(--accent); }
+        .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+        /* Reveal animations */
+        .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+        /* Utility */
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        .text-center { text-align: center; }
+        .mt-16 { margin-top: 16px; }
+        .mt-24 { margin-top: 24px; }
+        .mb-16 { margin-bottom: 16px; }
+        .mb-24 { margin-bottom: 24px; }
+        .gap-8 { gap: 8px; }
+    </style>
+</head>
+<body>
+    <a href="#overview" class="skip-link">Skip to main content</a>
+
+    <!-- ============ NAVBAR ============ -->
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
+        <div class="navbar-inner">
+            <a href="#overview" class="nav-brand" aria-label="EDGE AI home">
+                <span class="brand-dot" aria-hidden="true"></span>
+                EDGE AI
+            </a>
+            <ul class="nav-links" role="menubar">
+                <li role="none"><a href="#overview" class="nav-link active" role="menuitem">Overview</a></li>
+                <li role="none"><a href="#live-demo" class="nav-link" role="menuitem">Live Demo</a></li>
+                <li role="none"><a href="#architecture" class="nav-link" role="menuitem">Architecture</a></li>
+                <li role="none"><a href="#applications" class="nav-link" role="menuitem">Applications</a></li>
+                <li role="none"><a href="#gallery" class="nav-link" role="menuitem">Gallery</a></li>
+                <li role="none"><a href="#technology" class="nav-link" role="menuitem">Technology</a></li>
+                <li role="none"><a href="#vision" class="nav-link" role="menuitem">Vision</a></li>
+                <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+                    <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                </button>
+                <a href="#live-demo" class="btn btn-primary nav-demo-btn">Launch Demo</a>
+                <button class="icon-btn hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile menu">
+        <div class="mobile-menu-header">
+            <span class="nav-brand"><span class="brand-dot" aria-hidden="true"></span>EDGE AI</span>
+            <button class="icon-btn" id="mobile-close" aria-label="Close menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <a href="#overview" class="mobile-link active">Overview</a>
+        <a href="#live-demo" class="mobile-link">Live Demo</a>
+        <a href="#architecture" class="mobile-link">Architecture</a>
+        <a href="#applications" class="mobile-link">Applications</a>
+        <a href="#gallery" class="mobile-link">Gallery</a>
+        <a href="#technology" class="mobile-link">Technology</a>
+        <a href="#vision" class="mobile-link">Vision</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+        <a href="#live-demo" class="btn btn-primary mobile-demo-btn">Launch Demo</a>
+    </div>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <main>
+        <!-- HERO SECTION -->
+        <section id="overview" class="hero" aria-label="Edge AI overview">
+            <div class="container">
+                <div class="hero-copy reveal visible">
+                    <p class="section-label">Edge AI</p>
+                    <h1>INTELLIGENCE,<br><span class="accent-text">WHERE DATA HAPPENS.</span></h1>
+                    <p>Edge AI brings machine intelligence closer to the devices creating the data — enabling responsive, resilient and privacy-aware intelligent experiences without requiring every inference request to travel to the cloud.</p>
+                    <div class="hero-actions">
+                        <a href="#live-demo" class="btn btn-primary btn-lg">Launch Live Demo</a>
+                        <a href="#architecture" class="btn btn-secondary btn-lg">Explore Architecture</a>
+                    </div>
+                </div>
+                <div class="hero-visual reveal visible">
+                    <div class="diagram-card" aria-label="Cloud AI flow diagram">
+                        <div class="diagram-title">CLOUD AI</div>
+                        <svg class="flow-diagram" viewBox="0 0 320 140" role="img" aria-label="Cloud AI data flow">
+                            <rect class="flow-node" x="10" y="55" width="50" height="30" /><text class="flow-label" x="35" y="74">Device</text>
+                            <line class="flow-arrow" x1="60" y1="70" x2="95" y2="70" /><rect class="flow-node" x="95" y="55" width="50" height="30" /><text class="flow-label" x="120" y="74">Network</text>
+                            <line class="flow-arrow" x1="145" y1="70" x2="180" y2="70" /><rect class="flow-node" x="180" y="55" width="50" height="30" /><text class="flow-label" x="205" y="74">Cloud</text>
+                            <line class="flow-arrow" x1="205" y1="55" x2="205" y2="20" /><rect class="flow-node" x="180" y="5" width="50" height="28" /><text class="flow-label" x="205" y="23">AI Model</text>
+                            <line class="flow-arrow" x1="205" y1="33" x2="205" y2="55" />
+                            <line class="flow-arrow" x1="230" y1="70" x2="265" y2="70" /><rect class="flow-node" x="265" y="55" width="45" height="30" /><text class="flow-label" x="287" y="74">Result</text>
+                            <circle class="flow-dot animate" cx="77" cy="70" r="3" /><circle class="flow-dot animate" cx="162" cy="70" r="3" style="animation-delay:1s" /><circle class="flow-dot animate" cx="205" cy="38" r="3" style="animation-delay:2s" /><circle class="flow-dot animate" cx="247" cy="70" r="3" style="animation-delay:2.5s" />
+                        </svg>
+                    </div>
+                    <div class="diagram-card edge-highlight" aria-label="Edge AI flow diagram">
+                        <div class="diagram-title">EDGE AI</div>
+                        <svg class="flow-diagram" viewBox="0 0 320 100" role="img" aria-label="Edge AI data flow">
+                            <rect class="flow-node active-node" x="10" y="35" width="50" height="30" /><text class="flow-label" x="35" y="54">Device</text>
+                            <line class="flow-arrow" x1="60" y1="50" x2="120" y2="50" /><rect class="flow-node active-node" x="120" y="35" width="50" height="30" /><text class="flow-label" x="145" y="54">Local AI</text>
+                            <line class="flow-arrow" x1="170" y1="50" x2="230" y2="50" /><rect class="flow-node active-node" x="230" y="35" width="50" height="30" /><text class="flow-label" x="255" y="54">Result</text>
+                            <circle class="flow-dot animate" cx="90" cy="50" r="3" /><circle class="flow-dot animate" cx="200" cy="50" r="3" style="animation-delay:1.5s" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPLANATION SECTION -->
+        <section id="explanation" aria-label="What is Edge AI">
+            <div class="container">
+                <div class="explanation-card reveal">
+                    <p class="section-label">In 30 Seconds</p>
+                    <p><strong>Traditional AI</strong> can send data to remote infrastructure for processing. <strong>Edge AI</strong> moves appropriate inference closer to the source of the data.</p>
+                    <div class="highlight-chip-row">
+                        <span class="highlight-chip">Lower dependence on network round trips</span>
+                        <span class="highlight-chip">Local processing</span>
+                        <span class="highlight-chip">Potential privacy benefits</span>
+                        <span class="highlight-chip">Offline / limited-connectivity resilience</span>
+                    </div>
+                    <p style="font-size:0.8rem;margin-top:16px;color:var(--text-muted)">Benefits can vary depending on workload, hardware, and deployment context.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CLOUD VS EDGE -->
+        <section id="cloud-vs-edge" aria-label="Cloud vs Edge comparison">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Cloud vs Edge</p>
+                    <h2 class="section-title">Two Architectures, One Goal</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Compare how work is distributed between remote infrastructure and local devices.</p>
+                </div>
+                <div class="comparison-tabs reveal" role="tablist" aria-label="Comparison mode">
+                    <button class="comparison-tab active" id="tab-cloud" role="tab" aria-selected="true" aria-controls="cloud-panel">CLOUD AI</button>
+                    <button class="comparison-tab" id="tab-edge" role="tab" aria-selected="false" aria-controls="edge-panel">EDGE AI</button>
+                </div>
+                <div id="cloud-panel" role="tabpanel" aria-labelledby="tab-cloud" class="reveal">
+                    <div class="comparison-grid">
+                        <div class="comparison-item"><span class="ci-label">Processing location</span><span class="ci-value">Remote data centers</span><span class="ci-detail">Centralized compute infrastructure.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Network dependency</span><span class="ci-value">High</span><span class="ci-detail">Requires reliable connectivity.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Latency characteristics</span><span class="ci-value">Round-trip dependent</span><span class="ci-detail">May introduce delays.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Bandwidth considerations</span><span class="ci-value">Data transfer required</span><span class="ci-detail">Raw data streams may consume bandwidth.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Privacy considerations</span><span class="ci-value">Data leaves device</span><span class="ci-detail">Sensitive information transmitted.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Offline capability</span><span class="ci-value">Limited</span><span class="ci-detail">Connectivity interruption disrupts inference.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Hardware requirements</span><span class="ci-value">Device-dependent</span><span class="ci-detail">Thin clients can leverage cloud compute.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Scalability</span><span class="ci-value">Elastic cloud resources</span><span class="ci-detail">Scale by adding cloud capacity.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Typical workloads</span><span class="ci-value">Large models, batch processing</span><span class="ci-detail">Training, analytics, complex reasoning.</span></div>
+                    </div>
+                </div>
+                <div id="edge-panel" role="tabpanel" aria-labelledby="tab-edge" class="reveal" hidden>
+                    <div class="comparison-grid">
+                        <div class="comparison-item"><span class="ci-label">Processing location</span><span class="ci-value">Local device / gateway</span><span class="ci-detail">Compute at or near the source.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Network dependency</span><span class="ci-value">Lower</span><span class="ci-detail">Inference can run without connectivity.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Latency characteristics</span><span class="ci-value">Potentially lower</span><span class="ci-detail">May avoid network round trips.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Bandwidth considerations</span><span class="ci-value">Selective transmission</span><span class="ci-detail">Can send only relevant insights.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Privacy considerations</span><span class="ci-value">Can process locally</span><span class="ci-detail">Sensitive data may stay on-device.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Offline capability</span><span class="ci-value">Resilient</span><span class="ci-detail">Inference continues during connectivity loss.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Hardware requirements</span><span class="ci-value">Sufficient local compute</span><span class="ci-detail">Requires capable edge hardware.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Scalability</span><span class="ci-value">Distributed fleet</span><span class="ci-detail">Scale by adding edge devices.</span></div>
+                        <div class="comparison-item"><span class="ci-label">Typical workloads</span><span class="ci-value">Real-time, small models</span><span class="ci-detail">Immediate inference, smaller optimized models.</span></div>
+                    </div>
+                </div>
+                <div class="comparison-summary reveal">Sometimes the best architecture is <strong>both</strong>.</div>
+            </div>
+        </section>
+
+        <!-- LIVE DEMO -->
+        <section id="live-demo" aria-label="Live AI demonstration">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Live Demonstration</p>
+                    <h2 class="section-title">SEE EDGE AI THINK LOCALLY</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Run a real computer-vision model directly in your browser.</p>
+                </div>
+                <div class="demo-wrapper reveal">
+                    <div class="camera-panel">
+                        <div class="camera-viewport" id="camera-viewport">
+                            <video id="demo-video" autoplay playsinline muted aria-label="Webcam feed"></video>
+                            <canvas id="demo-canvas" aria-hidden="true"></canvas>
+                            <div class="camera-overlay" id="camera-overlay">
+                                <span class="co-icon" aria-hidden="true">📷</span>
+                                <h4>YOUR CAMERA. YOUR DEVICE.</h4>
+                                <p>Enable the camera to run object detection locally in your browser.</p>
+                                <div class="co-buttons">
+                                    <button class="btn btn-primary" id="btn-enable-camera">Enable Camera</button>
+                                    <button class="btn btn-secondary" id="btn-no-camera">Continue Without Camera</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="demo-status-bar" id="demo-status-bar">
+                            <span class="local-inference-indicator" id="local-inference-indicator" style="display:none;">
+                                <span class="pulse-dot" aria-hidden="true"></span> LOCAL INFERENCE ACTIVE
+                            </span>
+                            <span id="demo-status-text" style="font-size:0.8rem;color:var(--text-secondary);">Idle</span>
+                        </div>
+                        <div class="demo-controls" id="demo-controls">
+                            <button class="btn btn-primary btn-sm" id="btn-start" disabled>Start</button>
+                            <button class="btn btn-secondary btn-sm" id="btn-pause" disabled>Pause</button>
+                            <button class="btn btn-secondary btn-sm" id="btn-resume" disabled>Resume</button>
+                            <button class="btn btn-danger btn-sm" id="btn-stop" disabled>Stop</button>
+                            <button class="btn btn-ghost btn-sm" id="btn-reset">Reset</button>
+                            <button class="btn btn-ghost btn-sm" id="btn-retry" style="display:none;">Retry</button>
+                        </div>
+                    </div>
+                    <aside class="side-panel" aria-label="AI status">
+                        <h4>AI Status</h4>
+                        <div class="metric-grid">
+                            <div class="metric-card"><span class="mc-label">Model</span><div class="mc-value" id="metric-model">COCO-SSD</div><div class="mc-note">Pretrained</div></div>
+                            <div class="metric-card"><span class="mc-label">Runtime</span><div class="mc-value">TensorFlow.js</div><div class="mc-note">CDN loaded</div></div>
+                            <div class="metric-card"><span class="mc-label">Inference</span><div class="mc-value" id="metric-inference">Browser / Local</div><div class="mc-note">On-device</div></div>
+                            <div class="metric-card"><span class="mc-label">Camera</span><div class="mc-value" id="metric-camera">Inactive</div><div class="mc-note" id="metric-camera-note">—</div></div>
+                            <div class="metric-card"><span class="mc-label">Status</span><div class="mc-value" id="metric-status">Idle</div><div class="mc-note" id="metric-status-note">Waiting</div></div>
+                            <div class="metric-card"><span class="mc-label">Objects Detected</span><div class="mc-value" id="metric-objects">—</div><div class="mc-note">Real-time</div></div>
+                            <div class="metric-card"><span class="mc-label">Frames Analyzed</span><div class="mc-value" id="metric-frames">0</div><div class="mc-note">Measured</div></div>
+                            <div class="metric-card"><span class="mc-label">Inference Time</span><div class="mc-value" id="metric-inference-time">—</div><div class="mc-note">Measured per frame</div></div>
+                            <div class="metric-card"><span class="mc-label">FPS</span><div class="mc-value" id="metric-fps">—</div><div class="mc-note">Measured</div></div>
+                        </div>
+                        <div class="loading-steps" id="loading-steps" style="display:none;" aria-live="polite">
+                            <div class="loading-step" data-step="runtime"><span class="step-indicator">1</span> Runtime</div>
+                            <div class="loading-step" data-step="model"><span class="step-indicator">2</span> Model</div>
+                            <div class="loading-step" data-step="camera"><span class="step-indicator">3</span> Camera</div>
+                            <div class="loading-step" data-step="inference"><span class="step-indicator">4</span> Inference</div>
+                            <div class="loading-step" data-step="ready"><span class="step-indicator">5</span> Ready</div>
+                        </div>
+                        <div id="demo-error-box" class="error-box" style="display:none;" aria-live="assertive"></div>
+                        <div id="demo-sim-label" style="display:none;"><span class="simulation-label">ILLUSTRATIVE SIMULATION — NOT LIVE AI INFERENCE</span></div>
+                        <p style="font-size:0.7rem;color:var(--text-muted);line-height:1.5;">This prototype performs model inference inside the browser rather than sending camera frames to a custom backend. Inference occurs on your device.</p>
+                    </aside>
+                </div>
+                <div class="data-path-viz mt-24 reveal">
+                    <div class="data-path-card local-active" id="dpc-edge">
+                        <span class="dpc-title" style="color:var(--success)">EDGE</span>
+                        <div class="dpc-flow">
+                            Camera<br><span class="flow-arrow-char">↓</span><br>Browser<br><span class="flow-arrow-char">↓</span><br>Local AI Model<br><span class="flow-arrow-char">↓</span><br>Prediction
+                        </div>
+                    </div>
+                    <div class="data-path-card" id="dpc-cloud">
+                        <span class="dpc-title">CLOUD</span>
+                        <div class="dpc-flow">
+                            Camera<br><span class="flow-arrow-char">↓</span><br>Network<br><span class="flow-arrow-char">↓</span><br>Remote Infrastructure<br><span class="flow-arrow-char">↓</span><br>AI Model<br><span class="flow-arrow-char">↓</span><br>Network<br><span class="flow-arrow-char">↓</span><br>Prediction
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHY EDGE AI -->
+        <section id="why-edge-ai" aria-label="Why Edge AI">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Why Edge AI</p>
+                    <h2 class="section-title">Designed for the Edge</h2>
+                </div>
+                <div class="why-grid">
+                    <div class="why-card reveal" tabindex="0" role="button" aria-label="Speed">
+                        <span class="why-icon" aria-hidden="true">⚡</span>
+                        <h3>SPEED</h3>
+                        <p>Processing closer to the source can reduce dependence on remote round trips, enabling more responsive experiences.</p>
+                        <span class="why-visual-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="why-card reveal" tabindex="0" role="button" aria-label="Privacy">
+                        <span class="why-icon" aria-hidden="true">🔒</span>
+                        <h3>PRIVACY</h3>
+                        <p>Some sensitive data can be processed locally rather than continuously transmitted.</p>
+                        <span class="why-visual-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="why-card reveal" tabindex="0" role="button" aria-label="Resilience">
+                        <span class="why-icon" aria-hidden="true">🛡️</span>
+                        <h3>RESILIENCE</h3>
+                        <p>Local inference can remain useful when connectivity is limited.</p>
+                        <span class="why-visual-dot" aria-hidden="true"></span>
+                    </div>
+                    <div class="why-card reveal" tabindex="0" role="button" aria-label="Efficiency">
+                        <span class="why-icon" aria-hidden="true">📊</span>
+                        <h3>EFFICIENCY</h3>
+                        <p>Processing locally can reduce unnecessary data movement in appropriate workloads.</p>
+                        <span class="why-visual-dot" aria-hidden="true"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE -->
+        <section id="architecture" aria-label="Architecture">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Architecture</p>
+                    <h2 class="section-title">FROM SENSOR TO INTELLIGENCE</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Click a stage to explore the inference pipeline.</p>
+                </div>
+                <div class="arch-pipeline reveal" id="arch-pipeline" role="tablist" aria-label="Architecture stages">
+                    <div class="arch-stage active" data-stage="0" role="tab" aria-selected="true" tabindex="0">DATA SOURCE</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="1" role="tab" aria-selected="false" tabindex="0">SENSOR / CAMERA</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="2" role="tab" aria-selected="false" tabindex="0">EDGE DEVICE</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="3" role="tab" aria-selected="false" tabindex="0">PREPROCESSING</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="4" role="tab" aria-selected="false" tabindex="0">AI MODEL</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="5" role="tab" aria-selected="false" tabindex="0">INFERENCE</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="6" role="tab" aria-selected="false" tabindex="0">DECISION</div>
+                    <span class="arch-arrow" aria-hidden="true">↓</span>
+                    <div class="arch-stage" data-stage="7" role="tab" aria-selected="false" tabindex="0">ACTION</div>
+                </div>
+                <div class="arch-detail reveal" id="arch-detail" aria-live="polite">
+                    <strong>Data Source:</strong> The origin of information — a physical signal, a camera frame, an audio stream, a sensor reading, or a time-series measurement.
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">EDGE DEVICE ↔ CLOUD</h3>
+                    <p class="section-subtitle" style="margin:0 auto;">Cloud infrastructure can still support training, analytics, storage, model management, updates, coordination, and heavier workloads.</p>
+                </div>
+                <div class="edge-cloud-split reveal">
+                    <div class="edge-cloud-panel">
+                        <h4 style="color:var(--success)">EDGE</h4>
+                        <ul>
+                            <li>Local inference</li>
+                            <li>Fast response</li>
+                            <li>Selected sensitive workloads</li>
+                        </ul>
+                    </div>
+                    <span class="edge-cloud-plus" aria-hidden="true">+</span>
+                    <div class="edge-cloud-panel">
+                        <h4 style="color:var(--accent)">CLOUD</h4>
+                        <ul>
+                            <li>Training</li>
+                            <li>Analytics</li>
+                            <li>Storage</li>
+                            <li>Model management</li>
+                            <li>Fleet coordination</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="comparison-summary reveal">Edge AI does not eliminate the cloud. It changes where appropriate computation happens.</div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">EDGE AI LIFECYCLE</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Click each stage to learn more.</p>
+                </div>
+                <div class="lifecycle-row reveal" id="lifecycle-row" role="tablist" aria-label="Lifecycle stages">
+                    <div class="lifecycle-step active" data-lifecycle="0" role="tab" aria-selected="true" tabindex="0">1. Collect</div>
+                    <div class="lifecycle-step" data-lifecycle="1" role="tab" aria-selected="false" tabindex="0">2. Process</div>
+                    <div class="lifecycle-step" data-lifecycle="2" role="tab" aria-selected="false" tabindex="0">3. Infer</div>
+                    <div class="lifecycle-step" data-lifecycle="3" role="tab" aria-selected="false" tabindex="0">4. Decide</div>
+                    <div class="lifecycle-step" data-lifecycle="4" role="tab" aria-selected="false" tabindex="0">5. Act</div>
+                    <div class="lifecycle-step" data-lifecycle="5" role="tab" aria-selected="false" tabindex="0">6. Update</div>
+                </div>
+                <div class="lifecycle-detail reveal" id="lifecycle-detail" aria-live="polite">
+                    <strong>Collect:</strong> Data is captured from sensors — cameras, microphones, accelerometers, or environmental sensors at the edge.
+                </div>
+            </div>
+        </section>
+
+        <!-- APPLICATIONS -->
+        <section id="applications" aria-label="Applications">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Applications</p>
+                    <h2 class="section-title">EDGE AI IN THE REAL WORLD</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Explore how edge AI could be applied across domains. Click a card to learn more.</p>
+                </div>
+                <div class="apps-grid reveal" id="apps-grid">
+                    <div class="app-card" data-app="0" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Smart Cameras <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate video frames. Local AI can detect objects or anomalies in real time. Local inference reduces bandwidth needs and enables immediate alerts.</span></div>
+                    <div class="app-card" data-app="1" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Robotics <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate sensor and motor data. Local AI can enable real-time motion control and object avoidance. Low latency is critical for safe operation.</span></div>
+                    <div class="app-card" data-app="2" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Drones <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate video and flight telemetry. Local AI can support navigation and inspection tasks, even when connectivity is intermittent.</span></div>
+                    <div class="app-card" data-app="3" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Vehicles <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate camera, radar, and vehicle data. Local AI can support driver assistance and autonomous features that require immediate response.</span></div>
+                    <div class="app-card" data-app="4" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Industrial IoT <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate sensor and machine telemetry. Local AI can detect anomalies and predict maintenance needs on the factory floor.</span></div>
+                    <div class="app-card" data-app="5" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Healthcare Wearables <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate heart-rate, movement, and oxygen data. Local AI can monitor vital signs and flag concerning patterns while keeping data on-device.</span></div>
+                    <div class="app-card" data-app="6" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Agriculture <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate field imagery and soil sensor data. Local AI can identify crop health issues and optimize resource use in remote locations.</span></div>
+                    <div class="app-card" data-app="7" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Smartphones <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate camera, audio, and touch data. Local AI can power real-time language translation, face recognition, and camera enhancements.</span></div>
+                    <div class="app-card" data-app="8" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Energy Systems <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate grid and sensor data. Local AI can help balance loads and detect equipment issues in distributed infrastructure.</span></div>
+                    <div class="app-card" data-app="9" role="button" tabindex="0" aria-expanded="false"><span class="app-name">Smart Homes <span class="app-chevron" aria-hidden="true">▾</span></span><span class="app-summary">Generate motion, audio, and environmental data. Local AI can support responsive automation while keeping household data on-site.</span></div>
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">DEVICE EXPLORER</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Select a category and device to see how inference could work locally.</p>
+                </div>
+                <div class="device-categories reveal" id="device-categories" role="tablist" aria-label="Device categories">
+                    <button class="device-cat-btn active" data-cat="personal" role="tab" aria-selected="true">PERSONAL</button>
+                    <button class="device-cat-btn" data-cat="mobility" role="tab" aria-selected="false">MOBILITY</button>
+                    <button class="device-cat-btn" data-cat="industrial" role="tab" aria-selected="false">INDUSTRIAL</button>
+                    <button class="device-cat-btn" data-cat="healthcare" role="tab" aria-selected="false">HEALTHCARE</button>
+                </div>
+                <div class="device-chips reveal" id="device-chips" role="tablist" aria-label="Device list"></div>
+                <div class="device-detail reveal" id="device-detail" aria-live="polite">
+                    <div class="device-flow" id="device-flow">
+                        Data <span class="flow-sep">↓</span> Local AI Task <span class="flow-sep">↓</span> Decision <span class="flow-sep">↓</span> Potential Benefit
+                    </div>
+                    <div id="device-detail-text"><strong>Smartphone:</strong> Generates camera, audio, and touch data. Local AI can run real-time language translation. Decisions happen on-device, which may reduce latency and keep data local.</div>
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">EDGE OR CLOUD?</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Answer a few conceptual questions to explore architecture fit.</p>
+                </div>
+                <div class="decision-questions reveal" id="decision-questions">
+                    <div class="dq-item"><span class="dq-question">Does the application require very fast response?</span><div class="dq-options" data-q="0"><button class="dq-btn" data-answer="yes">Yes</button><button class="dq-btn" data-answer="maybe">Maybe</button><button class="dq-btn" data-answer="no">No</button></div></div>
+                    <div class="dq-item"><span class="dq-question">Is the data sensitive?</span><div class="dq-options" data-q="1"><button class="dq-btn" data-answer="yes">Yes</button><button class="dq-btn" data-answer="maybe">Maybe</button><button class="dq-btn" data-answer="no">No</button></div></div>
+                    <div class="dq-item"><span class="dq-question">Is connectivity unreliable?</span><div class="dq-options" data-q="2"><button class="dq-btn" data-answer="yes">Yes</button><button class="dq-btn" data-answer="maybe">Maybe</button><button class="dq-btn" data-answer="no">No</button></div></div>
+                    <div class="dq-item"><span class="dq-question">Is bandwidth limited?</span><div class="dq-options" data-q="3"><button class="dq-btn" data-answer="yes">Yes</button><button class="dq-btn" data-answer="maybe">Maybe</button><button class="dq-btn" data-answer="no">No</button></div></div>
+                    <div class="dq-item"><span class="dq-question">Does the device have sufficient compute?</span><div class="dq-options" data-q="4"><button class="dq-btn" data-answer="yes">Yes</button><button class="dq-btn" data-answer="maybe">Maybe</button><button class="dq-btn" data-answer="no">No</button></div></div>
+                </div>
+                <div class="decision-result reveal" id="decision-result" style="display:none;" aria-live="polite">
+                    <span class="dr-label">Recommended Architecture</span>
+                    <div class="dr-value" id="dr-value"></div>
+                    <div class="dr-explanation" id="dr-explanation"></div>
+                </div>
+                <p class="decision-disclaimer reveal">Conceptual architecture guide — not a formal engineering decision system.</p>
+            </div>
+        </section>
+
+        <!-- GALLERY SECTION -->
+        <section id="gallery" aria-label="Edge AI gallery">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Gallery</p>
+                    <h2 class="section-title">EDGE AI IN PICTURES</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Visual snapshots of edge intelligence in action.</p>
+                </div>
+                <div class="gallery-grid reveal" id="gallery-grid">
+                    <div class="gallery-item" tabindex="0" role="button" aria-label="Edge AI on smartphones">
+                        <div class="gallery-image" style="background-image: url('images/edge-ai-smart-camera.jpg');"></div>
+                        <div class="gallery-caption">Smart Camera <small>Real-time object detection</small></div>
+                    </div>
+                    <div class="gallery-item" tabindex="0" role="button" aria-label="Edge AI in robotics">
+                        <div class="gallery-image" style="background-image: url('images/edge-ai-robotics.jpg');"></div>
+                        <div class="gallery-caption">Robotics <small>Local motion planning</small></div>
+                    </div>
+                    <div class="gallery-item" tabindex="0" role="button" aria-label="Edge AI in drones">
+                        <div class="gallery-image" style="background-image: url('images/edge-ai-drones.jpg');"></div>
+                        <div class="gallery-caption">Drones <small>Obstacle avoidance</small></div>
+                    </div>
+                    <div class="gallery-item" tabindex="0" role="button" aria-label="Edge AI in vehicles">
+                        <div class="gallery-image" style="background-image: url('images/edge-ai-vehicles.jpg');"></div>
+                        <div class="gallery-caption">Vehicles <small>ADAS features</small></div>
+                    </div>
+                    <div class="gallery-item" tabindex="0" role="button" aria-label="Edge AI in healthcare">
+                        <div class="gallery-image" style="background-image: url('images/edge-ai-healthcare.jpg');"></div>
+                        <div class="gallery-caption">Healthcare <small>Wearable monitoring</small></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TECHNOLOGY -->
+        <section id="technology" aria-label="Technology">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Technology</p>
+                    <h2 class="section-title">UNDER THE HOOD</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Compact technical deep dive. Click a topic to expand.</p>
+                </div>
+                <div class="dd-accordion reveal" id="dd-accordion">
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Inference <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Running a trained model to generate predictions.<span class="dd-label">Technical</span>Forward pass through a neural network using matrix operations.<span class="dd-label">Why it matters</span>Inference speed directly impacts user experience and device resource use.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Quantization <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Reducing numeric precision to shrink models.<span class="dd-label">Technical</span>Converting FP32 weights to INT8 or FP16, trading minor accuracy loss for significant size and speed gains.<span class="dd-label">Why it matters</span>Enables large models on memory-constrained edge devices.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Pruning <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Removing less important connections.<span class="dd-label">Technical</span>Zeroing out low-magnitude weights and removing corresponding connections.<span class="dd-label">Why it matters</span>Sparse models can run faster on hardware that supports them.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Compression <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Making models smaller on disk.<span class="dd-label">Technical</span>Applying weight sharing, clustering, or encoding to reduce storage footprint.<span class="dd-label">Why it matters</span>Smaller models transfer faster and consume less flash storage.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Model Optimization <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Tuning models for target hardware.<span class="dd-label">Technical</span>Combining quantization, pruning, and architecture search to balance accuracy vs. compute.<span class="dd-label">Why it matters</span>Optimized models are essential for reliable on-device performance.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">CPU <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>General-purpose processor.<span class="dd-label">Technical</span>Executes inference via SIMD and vector instructions (e.g., NEON, AVX).<span class="dd-label">Why it matters</span>Broadly available but may be slower than dedicated accelerators for heavy inference.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">GPU <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Parallel graphics processor.<span class="dd-label">Technical</span>Excellent at throughput for matrix operations with high memory bandwidth.<span class="dd-label">Why it matters</span>Accelerates inference significantly for models with parallel workloads.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">NPU <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Neural processing unit.<span class="dd-label">Technical</span>Purpose-built for low-power, high-throughput tensor operations.<span class="dd-label">Why it matters</span>Dramatically improves inference energy efficiency on edge devices.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Memory <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Working storage for models and data.<span class="dd-label">Technical</span>Edge devices often have limited RAM; model and activation memory must fit within constraints.<span class="dd-label">Why it matters</span>Memory limitations often drive model choice and optimization strategies.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Power Constraints <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Available energy for inference.<span class="dd-label">Technical</span>Battery-powered edge devices balance compute demand against thermal and energy budgets.<span class="dd-label">Why it matters</span>Affects model size, hardware selection, and inference frequency.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">Hardware Acceleration <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Specialized hardware for faster inference.<span class="dd-label">Technical</span>Leverages GPU, NPU, DSP, or custom silicon to speed model execution.<span class="dd-label">Why it matters</span>Determines whether real-time edge inference is feasible for a workload.</div></div></div>
+                    <div class="dd-item"><button class="dd-trigger" aria-expanded="false">On-Device Deployment <span class="dd-chevron" aria-hidden="true">▾</span></button><div class="dd-content"><div class="dd-content-inner"><span class="dd-label">Simple</span>Putting models onto edge hardware.<span class="dd-label">Technical</span>Involves packaging optimized model formats, managing runtime dependencies, and ensuring version compatibility.<span class="dd-label">Why it matters</span>Deployment complexity is a significant barrier to production edge AI.</div></div></div>
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">EDGE AI STACK</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Click a layer to explore the stack. Ecosystem examples shown as references, not endorsements.</p>
+                </div>
+                <div class="stack-container reveal" id="stack-container">
+                    <div class="stack-layer active" data-layer="0" role="button" tabindex="0">APPLICATION</div>
+                    <div class="stack-layer" data-layer="1" role="button" tabindex="0">AI MODEL</div>
+                    <div class="stack-layer" data-layer="2" role="button" tabindex="0">INFERENCE RUNTIME</div>
+                    <div class="stack-layer" data-layer="3" role="button" tabindex="0">ACCELERATION</div>
+                    <div class="stack-layer" data-layer="4" role="button" tabindex="0">OPERATING SYSTEM</div>
+                    <div class="stack-layer" data-layer="5" role="button" tabindex="0">HARDWARE</div>
+                    <div class="stack-layer" data-layer="6" role="button" tabindex="0">SENSORS</div>
+                </div>
+                <div class="stack-detail reveal" id="stack-detail" aria-live="polite">
+                    <strong>Application:</strong> The user-facing software that leverages AI inference to deliver intelligent features.
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">FROM MODEL TO DEVICE</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Production Edge AI involves more than running a model.</p>
+                </div>
+                <div class="model-lifecycle reveal">
+                    <span class="ml-step">Training</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Optimization</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Quantization</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Deployment</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Inference</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Monitoring</span><span class="arch-arrow" aria-hidden="true">→</span>
+                    <span class="ml-step">Update</span>
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">FROM PROTOTYPE TO PRODUCTION</h3>
+                </div>
+                <div class="production-flow reveal">
+                    <div class="prod-box"><span class="pb-label">Prototype</span><div class="pb-value">Browser inference</div></div>
+                    <span class="prod-arrow" aria-hidden="true">→</span>
+                    <div class="prod-box"><span class="pb-label">Production</span><div class="pb-value">Optimized models</div></div>
+                    <span class="prod-arrow" aria-hidden="true">→</span>
+                    <div class="prod-box"><span class="pb-label">Production</span><div class="pb-value">Hardware acceleration</div></div>
+                    <span class="prod-arrow" aria-hidden="true">→</span>
+                    <div class="prod-box"><span class="pb-label">Production</span><div class="pb-value">Device management</div></div>
+                    <span class="prod-arrow" aria-hidden="true">→</span>
+                    <div class="prod-box"><span class="pb-label">Production</span><div class="pb-value">Security · Monitoring · Updates · Edge + Cloud</div></div>
+                </div>
+
+                <div class="mt-24 text-center reveal">
+                    <h3 class="sub-title">EDGE AI SECURITY</h3>
+                    <p class="section-subtitle" style="margin:0 auto;margin-bottom:16px;">Edge AI does not automatically solve security or privacy challenges.</p>
+                </div>
+                <div class="security-grid reveal">
+                    <div class="security-item"><strong>Secure updates</strong>Signed model and firmware updates prevent tampering during deployment.</div>
+                    <div class="security-item"><strong>Model protection</strong>Encryption and obfuscation can deter reverse engineering, but no method is absolute.</div>
+                    <div class="security-item"><strong>Device compromise</strong>Physical access to edge hardware introduces unique attack surfaces.</div>
+                    <div class="security-item"><strong>Encrypted communication</strong>When data does travel, encryption protects it in transit.</div>
+                    <div class="security-item"><strong>Access control</strong>Role-based permissions govern device and data interactions.</div>
+                    <div class="security-item"><strong>Adversarial inputs</strong>Models can be fooled by carefully crafted inputs; robustness is an active research area.</div>
+                    <div class="security-item"><strong>Privacy risks</strong>Local processing reduces some risks but does not eliminate all privacy concerns.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VISION -->
+        <section id="vision" aria-label="Vision">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Future Vision</p>
+                    <h2 class="section-title">A WORLD WHERE INTELLIGENCE IS EVERYWHERE</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Distributed intelligence across people, devices, sensors, and connected systems.</p>
+                </div>
+                <div class="vision-visual reveal">
+                    <span class="vision-node">People</span>
+                    <span class="vision-arrow" aria-hidden="true">↓</span>
+                    <span class="vision-node">Devices</span>
+                    <span class="vision-arrow" aria-hidden="true">↓</span>
+                    <span class="vision-node">Sensors</span>
+                    <span class="vision-arrow" aria-hidden="true">↓</span>
+                    <span class="vision-node accent">Edge Intelligence</span>
+                    <span class="vision-arrow" aria-hidden="true">↓</span>
+                    <span class="vision-node accent">Cloud Intelligence</span>
+                    <span class="vision-arrow" aria-hidden="true">↓</span>
+                    <span class="vision-node">Connected Systems</span>
+                </div>
+                <div class="boundary-note reveal mt-24">
+                    <strong>Prototype boundaries:</strong> This prototype demonstrates browser-based local inference and Edge AI architecture concepts. Production Edge AI systems require additional work in model optimization, hardware acceleration, deployment, security, monitoring, and model lifecycle management.
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" aria-label="Contact">
+            <div class="container">
+                <div class="text-center mb-24 reveal">
+                    <p class="section-label">Contact</p>
+                    <h2 class="section-title">GET IN TOUCH</h2>
+                    <p class="section-subtitle" style="margin:0 auto;">Questions, feedback, or partnership ideas? Send us a message.</p>
+                </div>
+                <div class="contact-card reveal">
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" placeholder="Message subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" placeholder="Your message..." required></textarea>
+                        </div>
+                        <div class="contact-actions">
+                            <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+                            <a href="mailto:itxhassankhan45@gmail.com?subject=Edge%20AI%20Inquiry" class="btn btn-secondary btn-lg">Email the Team</a>
+                        </div>
+                        <div class="form-success-message" id="form-success-message">
+                            ✓ Your email client should open with your message. If not, please email us directly at <strong>itxhassankhan45@gmail.com</strong>.
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand"><span class="brand-dot" aria-hidden="true"></span>EDGE AI</div>
+                    <p class="footer-tagline">Intelligence, Where Data Happens.</p>
+                    <p class="footer-disclaimer">This prototype demonstrates browser-based local inference and conceptual Edge AI architecture. Not a production system.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Explore</h4>
+                    <a href="#overview">Overview</a>
+                    <a href="#live-demo">Live Demo</a>
+                    <a href="#architecture">Architecture</a>
+                    <a href="#gallery">Gallery</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Learn More</h4>
+                    <a href="#applications">Applications</a>
+                    <a href="#technology">Technology</a>
+                    <a href="#vision">Vision</a>
+                    <a href="#contact">Contact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2025 EDGE AI — Prototype</span>
+                <span>Built with TensorFlow.js · COCO-SSD</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating demo mode button -->
+    <button class="floating-demo-btn" id="floating-demo-btn" aria-label="Launch demo mode">
+        <span aria-hidden="true">▶</span> DEMO MODE
+    </button>
+
+    <!-- Demo Mode Overlay -->
+    <div class="demo-mode-overlay" id="demo-mode-overlay" role="dialog" aria-modal="true" aria-label="Presentation demo mode">
+        <div class="demo-mode-header">
+            <span class="dm-title">EDGE AI — PRESENTATION</span>
+            <span class="dm-progress" id="dm-progress">01 / 08</span>
+            <button class="btn btn-secondary btn-sm" id="dm-exit">Exit</button>
+        </div>
+        <div class="demo-mode-body" id="dm-body">
+            <div class="demo-mode-slide">
+                <span class="dm-slide-label" id="dm-slide-label">What is Edge AI?</span>
+                <h2 id="dm-slide-title">INTELLIGENCE, WHERE DATA HAPPENS.</h2>
+                <div class="dm-slide-content" id="dm-slide-content">
+                    <p>Edge AI brings machine intelligence closer to the devices creating the data — enabling responsive, resilient and privacy-aware intelligent experiences without requiring every inference to travel to the cloud.</p>
+                </div>
+            </div>
+        </div>
+        <div class="demo-mode-footer">
+            <span class="dm-hint">← → navigate · Space next · Esc exit · Home start · End finish</span>
+            <div class="dm-nav-btns">
+                <button class="btn btn-secondary btn-sm" id="dm-prev">Previous</button>
+                <button class="btn btn-primary btn-sm" id="dm-next">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        'use strict';
+
+        // ============ UTILITY FUNCTIONS ============
+        const $ = (sel, ctx = document) => ctx.querySelector(sel);
+        const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+
+        function debounce(fn, ms) {
+            let t;
+            return function(...args) {
+                clearTimeout(t);
+                t = setTimeout(() => fn.apply(this, args), ms);
+            };
+        }
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                if (document.querySelector(`script[src="${src}"]`)) return resolve();
+                const s = document.createElement('script');
+                s.src = src;
+                s.defer = true;
+                s.onload = resolve;
+                s.onerror = () => reject(new Error(`Failed to load ${src}`));
+                document.head.appendChild(s);
+            });
+        }
+
+        // ============ THEME TOGGLE ============
+        const themeToggle = $('#theme-toggle');
+        const themeIcon = $('#theme-icon');
+        const htmlEl = document.documentElement;
+
+        function getPreferredTheme() {
+            const stored = localStorage.getItem('edge-ai-theme');
+            if (stored) return stored;
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+            return 'dark';
+        }
+
+        function setTheme(theme) {
+            htmlEl.setAttribute('data-theme', theme);
+            localStorage.setItem('edge-ai-theme', theme);
+            themeIcon.setAttribute('d', theme === 'dark' 
+                ? 'M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z' 
+                : 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z');
+        }
+        setTheme(getPreferredTheme());
+
+        themeToggle.addEventListener('click', () => {
+            const current = htmlEl.getAttribute('data-theme');
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        });
+
+        // ============ NAVBAR SCROLL EFFECT ============
+        const navbar = $('#navbar');
+        const navLinks = $$('.nav-link');
+        const mobileLinks = $$('.mobile-link');
+
+        function updateNavbar() {
+            if (window.scrollY > 20) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }
+        window.addEventListener('scroll', debounce(updateNavbar, 50), { passive: true });
+        updateNavbar();
+
+        // ============ MOBILE MENU ============
+        const hamburgerBtn = $('#hamburger-btn');
+        const mobileMenu = $('#mobile-menu');
+        const mobileOverlay = $('#mobile-overlay');
+        const mobileClose = $('#mobile-close');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            mobileOverlay.classList.add('visible');
+            hamburgerBtn.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.remove('visible');
+            hamburgerBtn.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+        hamburgerBtn.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('open')) closeMobileMenu();
+            else openMobileMenu();
+        });
+        mobileClose.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        $$('.mobile-link').forEach(l => l.addEventListener('click', closeMobileMenu));
+
+        // ============ ACTIVE SECTION HIGHLIGHTING ============
+        const sections = ['overview', 'live-demo', 'architecture', 'applications', 'gallery', 'technology', 'vision', 'contact'];
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    navLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                    mobileLinks.forEach(link => {
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                    });
+                }
+            });
+        }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) sectionObserver.observe(el);
+        });
+
+        // ============ SCROLL REVEALS ============
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        $$('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ============ CLOUD VS EDGE TABS ============
+        const tabCloud = $('#tab-cloud');
+        const tabEdge = $('#tab-edge');
+        const panelCloud = $('#cloud-panel');
+        const panelEdge = $('#edge-panel');
+
+        function setComparisonTab(mode) {
+            const isCloud = mode === 'cloud';
+            tabCloud.classList.toggle('active', isCloud);
+            tabEdge.classList.toggle('active', !isCloud);
+            tabCloud.setAttribute('aria-selected', isCloud);
+            tabEdge.setAttribute('aria-selected', !isCloud);
+            panelCloud.hidden = !isCloud;
+            panelEdge.hidden = isCloud;
+        }
+        tabCloud.addEventListener('click', () => setComparisonTab('cloud'));
+        tabEdge.addEventListener('click', () => setComparisonTab('edge'));
+
+        // ============ ARCHITECTURE PIPELINE ============
+        const archStages = $$('.arch-stage');
+        const archDetail = $('#arch-detail');
+        const archDescriptions = [
+            '<strong>Data Source:</strong> The origin of information — a physical signal, a camera frame, an audio stream, a sensor reading, or a time-series measurement.',
+            '<strong>Sensor / Camera:</strong> Hardware that converts physical phenomena into digital data ready for processing.',
+            '<strong>Edge Device:</strong> A local computing node — smartphone, camera, MCU, gateway, or embedded system — where inference can run.',
+            '<strong>Preprocessing:</strong> Normalization, scaling, feature extraction, and data transformation to prepare input for the model.',
+            '<strong>AI Model:</strong> A trained neural network or algorithm that processes the prepared input and generates output.',
+            '<strong>Inference:</strong> The computational pass through the model that produces a prediction, classification, or embedding.',
+            '<strong>Decision:</strong> Logic that interprets model output and determines the appropriate response or action.',
+            '<strong>Action:</strong> The final output — an alert, a control signal, a stored result, or a data transmission to other systems.'
+        ];
+
+        function setArchStage(index) {
+            archStages.forEach((s, i) => {
+                s.classList.toggle('active', i === index);
+                s.setAttribute('aria-selected', i === index);
+            });
+            archDetail.innerHTML = archDescriptions[index];
+        }
+        archStages.forEach((stage, i) => {
+            stage.addEventListener('click', () => setArchStage(i));
+            stage.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setArchStage(i);
+                }
+            });
+        });
+
+        // ============ LIFECYCLE ============
+        const lifecycleSteps = $$('.lifecycle-step');
+        const lifecycleDetail = $('#lifecycle-detail');
+        const lifecycleDescriptions = [
+            '<strong>Collect:</strong> Data is captured from sensors — cameras, microphones, accelerometers, or environmental sensors at the edge.',
+            '<strong>Process:</strong> Raw data is filtered, normalized, and prepared for model input, often on the device itself.',
+            '<strong>Infer:</strong> The optimized model performs a forward pass to generate a prediction or embedding.',
+            '<strong>Decide:</strong> The model output is interpreted using thresholds, rules, or additional logic to determine an action.',
+            '<strong>Act:</strong> The system responds — sending an alert, adjusting a control, storing a result, or triggering a downstream process.',
+            '<strong>Update:</strong> New models, parameters, or configurations are deployed to the device, completing the feedback loop.'
+        ];
+
+        function setLifecycleStage(index) {
+            lifecycleSteps.forEach((s, i) => {
+                s.classList.toggle('active', i === index);
+                s.setAttribute('aria-selected', i === index);
+            });
+            lifecycleDetail.innerHTML = lifecycleDescriptions[index];
+        }
+        lifecycleSteps.forEach((step, i) => {
+            step.addEventListener('click', () => setLifecycleStage(i));
+            step.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setLifecycleStage(i);
+                }
+            });
+        });
+
+        // ============ APPLICATIONS ============
+        const appCards = $$('.app-card');
+        appCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const isOpen = card.classList.contains('active');
+                appCards.forEach(c => c.classList.remove('active'));
+                appCards.forEach(c => c.setAttribute('aria-expanded', 'false'));
+                if (!isOpen) {
+                    card.classList.add('active');
+                    card.setAttribute('aria-expanded', 'true');
+                }
+            });
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+
+        // ============ DEVICE EXPLORER ============
+        const deviceCatBtns = $$('.device-cat-btn');
+        const deviceChipsContainer = $('#device-chips');
+        const deviceDetailText = $('#device-detail-text');
+        const deviceFlow = $('#device-flow');
+
+        const deviceData = {
+            personal: [
+                { name: 'Smartphone', data: 'Camera, audio, touch', task: 'Real-time language translation', decision: 'On-device response', benefit: 'Lower latency, local data' },
+                { name: 'Wearable', data: 'Heart rate, motion', task: 'Health anomaly detection', decision: 'Immediate alert', benefit: 'Privacy, continuous monitoring' },
+                { name: 'Laptop', data: 'Camera, microphone, keyboard', task: 'Background blur, voice commands', decision: 'Local processing', benefit: 'Reduced network dependency' },
+            ],
+            mobility: [
+                { name: 'Vehicle', data: 'Camera, radar, telemetry', task: 'Object detection for ADAS', decision: 'Immediate control response', benefit: 'Ultra-low latency' },
+                { name: 'Drone', data: 'Video, GPS, altitude', task: 'Obstacle avoidance', decision: 'Flight path adjustment', benefit: 'Works without connectivity' },
+                { name: 'Robot', data: 'Lidar, camera, motor feedback', task: 'Real-time motion planning', decision: 'Safe navigation', benefit: 'Low latency, reliability' },
+            ],
+            industrial: [
+                { name: 'Machine', data: 'Vibration, temperature', task: 'Predictive maintenance', decision: 'Maintenance scheduling', benefit: 'Early fault detection' },
+                { name: 'Sensor', data: 'Environmental readings', task: 'Anomaly detection', decision: 'Process adjustment', benefit: 'Continuous local monitoring' },
+                { name: 'Camera', data: 'Visual inspection', task: 'Defect detection', decision: 'Reject or approve', benefit: 'Real-time quality control' },
+            ],
+            healthcare: [
+                { name: 'Medical Device', data: 'Vital signs, imaging', task: 'Critical condition detection', decision: 'Clinical alert', benefit: 'Patient data stays local' },
+                { name: 'Wearable Sensor', data: 'ECG, SpO2, motion', task: 'Continuous health monitoring', decision: 'Provider notification', benefit: 'Privacy, continuous care' },
+            ],
+        };
+
+        let currentCat = 'personal';
+        let currentDevice = 'Smartphone';
+
+        function renderDeviceChips() {
+            const devices = deviceData[currentCat] || [];
+            deviceChipsContainer.innerHTML = '';
+            devices.forEach((device, i) => {
+                const chip = document.createElement('button');
+                chip.className = 'device-chip' + (device.name === currentDevice ? ' active' : '');
+                chip.textContent = device.name;
+                chip.setAttribute('role', 'tab');
+                chip.setAttribute('aria-selected', device.name === currentDevice ? 'true' : 'false');
+                chip.addEventListener('click', () => {
+                    currentDevice = device.name;
+                    $$('.device-chip').forEach(c => c.classList.remove('active'));
+                    $$('.device-chip').forEach(c => c.setAttribute('aria-selected', 'false'));
+                    chip.classList.add('active');
+                    chip.setAttribute('aria-selected', 'true');
+                    updateDeviceDetail();
+                });
+                deviceChipsContainer.appendChild(chip);
+            });
+            updateDeviceDetail();
+        }
+
+        function updateDeviceDetail() {
+            const devices = deviceData[currentCat] || [];
+            const device = devices.find(d => d.name === currentDevice) || devices[0] || { name: '—', data: '—', task: '—', decision: '—', benefit: '—' };
+            deviceFlow.innerHTML = `<span>${device.data}</span> <span class="flow-sep">↓</span> <span>${device.task}</span> <span class="flow-sep">↓</span> <span>${device.decision}</span> <span class="flow-sep">↓</span> <span>${device.benefit}</span>`;
+            deviceDetailText.innerHTML = `<strong>${device.name}:</strong> Generates ${device.data.toLowerCase()}. Local AI can run ${device.task.toLowerCase()}. ${device.decision}. ${device.benefit}.`;
+        }
+        deviceCatBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.getAttribute('data-cat');
+                currentCat = cat;
+                const devices = deviceData[cat] || [];
+                currentDevice = devices[0]?.name || '—';
+                deviceCatBtns.forEach(b => b.classList.toggle('active', b === btn));
+                deviceCatBtns.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+                renderDeviceChips();
+            });
+        });
+        renderDeviceChips();
+
+        // ============ DECISION TOOL ============
+        const dqAnswers = [null, null, null, null, null];
+        const dqBtns = $$('.dq-btn');
+        const decisionResult = $('#decision-result');
+        const drValue = $('#dr-value');
+        const drExplanation = $('#dr-explanation');
+
+        dqBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const qIndex = parseInt(btn.closest('.dq-options').getAttribute('data-q'));
+                const answer = btn.getAttribute('data-answer');
+                dqAnswers[qIndex] = answer;
+                const siblingBtns = btn.closest('.dq-options').querySelectorAll('.dq-btn');
+                siblingBtns.forEach(b => b.classList.toggle('active', b === btn));
+                evaluateDecision();
+            });
+        });
+
+        function evaluateDecision() {
+            if (dqAnswers.some(a => a === null)) return;
+            const yesCount = dqAnswers.filter(a => a === 'yes').length;
+            const noCount = dqAnswers.filter(a => a === 'no').length;
+            const maybeCount = dqAnswers.filter(a => a === 'maybe').length;
+            const hasCompute = dqAnswers[4] !== 'no';
+            const needsFast = dqAnswers[0] === 'yes';
+            const dataSensitive = dqAnswers[1] === 'yes';
+            const connectivityPoor = dqAnswers[2] === 'yes';
+            const bandwidthLimited = dqAnswers[3] === 'yes';
+
+            let recommendation = '';
+            let explanation = '';
+
+            if (!hasCompute) {
+                recommendation = 'CLOUD';
+                explanation = 'Device compute appears insufficient for local inference. Cloud processing may be more practical, with edge used for data collection.';
+            } else if (yesCount >= 4) {
+                recommendation = 'EDGE';
+                explanation = 'Strong signals for edge: fast response, sensitive data, unreliable connectivity, and sufficient compute all favor local inference.';
+            } else if (yesCount >= 2 || (needsFast && dataSensitive) || (connectivityPoor && bandwidthLimited)) {
+                recommendation = 'HYBRID';
+                explanation = 'A hybrid architecture may be ideal — use edge for time-sensitive or sensitive inference, and cloud for training, analytics, and heavier workloads.';
+            } else if (noCount >= 4 && maybeCount <= 1) {
+                recommendation = 'CLOUD';
+                explanation = 'The workload appears tolerant of network round trips and may not require local processing. Cloud may be simpler and more cost-effective.';
+            } else {
+                recommendation = 'HYBRID';
+                explanation = 'Mixed signals suggest a hybrid approach — distribute computation based on each workload\'s specific constraints.';
+            }
+
+            decisionResult.style.display = 'block';
+            drValue.textContent = recommendation;
+            drValue.className = 'dr-value ' + recommendation.toLowerCase();
+            drExplanation.textContent = explanation;
+        }
+
+        // ============ TECHNICAL DEEP DIVE ============
+        const ddItems = $$('.dd-item');
+        ddItems.forEach(item => {
+            const trigger = $('.dd-trigger', item);
+            trigger.addEventListener('click', () => {
+                const isOpen = item.classList.contains('open');
+                ddItems.forEach(i => i.classList.remove('open'));
+                ddItems.forEach(i => $('.dd-trigger', i).setAttribute('aria-expanded', 'false'));
+                if (!isOpen) {
+                    item.classList.add('open');
+                    trigger.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // ============ STACK LAYERS ============
+        const stackLayers = $$('.stack-layer');
+        const stackDetail = $('#stack-detail');
+        const stackDescriptions = [
+            '<strong>Application:</strong> The user-facing software that leverages AI inference to deliver intelligent features.',
+            '<strong>AI Model:</strong> A trained, often optimized neural network. Formats may include TFLite, ONNX, Core ML, or custom runtimes.',
+            '<strong>Inference Runtime:</strong> Software that executes the model. Examples: TensorFlow.js, LiteRT / TensorFlow Lite ecosystem, ONNX Runtime, Core ML.',
+            '<strong>Acceleration:</strong> Hardware-accelerated execution. Examples: TensorRT, OpenVINO, GPU/NPU/DSP delegation.',
+            '<strong>Operating System:</strong> The system software managing resources and hardware access on the device.',
+            '<strong>Hardware:</strong> The physical compute platform. Examples: NVIDIA hardware, Qualcomm hardware, Apple silicon, ARM systems.',
+            '<strong>Sensors:</strong> The input devices — cameras, microphones, accelerometers, environmental sensors — that generate data.',
+        ];
+
+        function setStackLayer(index) {
+            stackLayers.forEach((l, i) => {
+                l.classList.toggle('active', i === index);
+            });
+            stackDetail.innerHTML = stackDescriptions[index];
+        }
+        stackLayers.forEach((layer, i) => {
+            layer.addEventListener('click', () => setStackLayer(i));
+            layer.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setStackLayer(i);
+                }
+            });
+        });
+
+        // ============ CONTACT FORM ============
+        const contactForm = $('#contact-form');
+        const formSuccessMessage = $('#form-success-message');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = $('#name').value.trim();
+            const email = $('#email').value.trim();
+            const subject = $('#subject').value.trim();
+            const message = $('#message').value.trim();
+            if (!name || !email || !message) {
+                alert('Please fill in name, email, and message.');
+                return;
+            }
+            const mailtoLink = `mailto:itxhassankhan45@gmail.com?subject=${encodeURIComponent(subject || 'Edge AI Inquiry')}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)}`;
+            window.location.href = mailtoLink;
+            formSuccessMessage.style.display = 'block';
+            setTimeout(() => {
+                formSuccessMessage.style.display = 'none';
+            }, 5000);
+        });
+
+        // ============ LIVE AI DEMO ============
+        const video = $('#demo-video');
+        const canvas = $('#demo-canvas');
+        const ctx = canvas.getContext('2d');
+        const cameraOverlay = $('#camera-overlay');
+        const btnEnableCamera = $('#btn-enable-camera');
+        const btnNoCamera = $('#btn-no-camera');
+        const btnStart = $('#btn-start');
+        const btnPause = $('#btn-pause');
+        const btnResume = $('#btn-resume');
+        const btnStop = $('#btn-stop');
+        const btnReset = $('#btn-reset');
+        const btnRetry = $('#btn-retry');
+        const demoStatusText = $('#demo-status-text');
+        const localInferenceIndicator = $('#local-inference-indicator');
+        const loadingSteps = $('#loading-steps');
+        const demoErrorBox = $('#demo-error-box');
+        const demoSimLabel = $('#demo-sim-label');
+        const metricModel = $('#metric-model');
+        const metricInference = $('#metric-inference');
+        const metricCamera = $('#metric-camera');
+        const metricCameraNote = $('#metric-camera-note');
+        const metricStatus = $('#metric-status');
+        const metricStatusNote = $('#metric-status-note');
+        const metricObjects = $('#metric-objects');
+        const metricFrames = $('#metric-frames');
+        const metricInferenceTime = $('#metric-inference-time');
+        const metricFps = $('#metric-fps');
+        const dpcEdge = $('#dpc-edge');
+        const dpcCloud = $('#dpc-cloud');
+
+        let tfLoaded = false;
+        let model = null;
+        let stream = null;
+        let inferenceRunning = false;
+        let inferencePaused = false;
+        let animationFrameId = null;
+        let framesAnalyzed = 0;
+        let lastFrameTime = 0;
+        let inferenceTimeSum = 0;
+        let inferenceTimeCount = 0;
+        let demoState = 'idle';
+        let detectionActive = false;
+        let lastPredictions = [];
+
+        function setDemoState(newState) {
+            demoState = newState;
+            updateDemoUI();
+        }
+
+        function updateDemoUI() {
+            const stateTexts = {
+                idle: 'Idle — waiting to start',
+                loading: 'Preparing Edge AI…',
+                ready: 'Ready — camera and model loaded',
+                running: 'Running — live inference active',
+                paused: 'Paused — inference suspended',
+                stopped: 'Stopped — resources released',
+                error: 'Error — see details below',
+                simulated: 'Concept simulation active',
+            };
+            demoStatusText.textContent = stateTexts[demoState] || demoState;
+            metricStatus.textContent = demoState.charAt(0).toUpperCase() + demoState.slice(1);
+            metricStatusNote.textContent = demoState === 'running' ? 'Active' : demoState === 'ready' ? 'Prepared' : demoState === 'loading' ? 'In progress' : demoState === 'paused' ? 'Paused' : '—';
+
+            const isActive = demoState === 'running';
+            localInferenceIndicator.style.display = isActive ? 'flex' : 'none';
+            dpcEdge.classList.toggle('local-active', isActive);
+            dpcCloud.classList.toggle('local-active', false);
+
+            btnEnableCamera.disabled = demoState !== 'idle';
+            btnNoCamera.disabled = demoState !== 'idle';
+            btnStart.disabled = demoState !== 'ready' && demoState !== 'paused';
+            btnPause.disabled = demoState !== 'running';
+            btnResume.disabled = demoState !== 'paused';
+            btnStop.disabled = demoState !== 'running' && demoState !== 'paused' && demoState !== 'ready';
+            btnRetry.style.display = demoState === 'error' ? 'inline-flex' : 'none';
+
+            if (stream && demoState !== 'idle') {
+                metricCamera.textContent = 'Active';
+                metricCameraNote.textContent = 'Webcam';
+            } else {
+                metricCamera.textContent = 'Inactive';
+                metricCameraNote.textContent = '—';
+            }
+
+            loadingSteps.style.display = demoState === 'loading' ? 'flex' : 'none';
+            cameraOverlay.classList.toggle('hidden', demoState !== 'idle' && demoState !== 'simulated');
+            if (demoState === 'idle') {
+                cameraOverlay.classList.remove('hidden');
+            }
+            demoSimLabel.style.display = demoState === 'simulated' ? 'inline-block' : 'none';
+        }
+
+        function updateLoadingStep(stepName, isDone) {
+            const stepEl = $(`.loading-step[data-step="${stepName}"]`);
+            if (!stepEl) return;
+            const indicator = $('.step-indicator', stepEl);
+            stepEl.classList.remove('active');
+            stepEl.classList.toggle('done', isDone);
+            if (isDone) indicator.textContent = '✓';
+        }
+
+        function setActiveStep(stepName) {
+            $$('.loading-step').forEach(s => {
+                if (s.getAttribute('data-step') === stepName) {
+                    s.classList.add('active');
+                    s.classList.remove('done');
+                    const ind = $('.step-indicator', s);
+                    ind.textContent = '…';
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+        }
+
+        function resetLoadingSteps() {
+            $$('.loading-step').forEach(s => {
+                s.classList.remove('active', 'done');
+                const ind = $('.step-indicator', s);
+                const stepIdx = parseInt(s.getAttribute('data-step')) || 1;
+                ind.textContent = stepIdx;
+            });
+            loadingSteps.style.display = 'none';
+        }
+
+        function showError(msg) {
+            demoErrorBox.style.display = 'block';
+            demoErrorBox.textContent = msg;
+            setDemoState('error');
+        }
+
+        function clearError() {
+            demoErrorBox.style.display = 'none';
+            demoErrorBox.textContent = '';
+        }
+
+        function releaseCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            video.srcObject = null;
+        }
+
+        function releaseInferenceLoop() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            inferenceRunning = false;
+            inferencePaused = false;
+            detectionActive = false;
+        }
+
+        function stopAll() {
+            releaseInferenceLoop();
+            releaseCamera();
+            setDemoState('stopped');
+            metricObjects.textContent = '—';
+            metricFps.textContent = '—';
+            metricInferenceTime.textContent = '—';
+            framesAnalyzed = 0;
+            metricFrames.textContent = '0';
+            inferenceTimeSum = 0;
+            inferenceTimeCount = 0;
+            lastPredictions = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function resetDemo() {
+            stopAll();
+            clearError();
+            resetLoadingSteps();
+            setDemoState('idle');
+            model = null;
+            tfLoaded = false;
+            demoSimLabel.style.display = 'none';
+            metricObjects.textContent = '—';
+            metricFps.textContent = '—';
+            metricInferenceTime.textContent = '—';
+            metricFrames.textContent = '0';
+            framesAnalyzed = 0;
+            lastPredictions = [];
+            demoErrorBox.style.display = 'none';
+            demoErrorBox.textContent = '';
+        }
+
+        async function loadTensorFlowResources() {
+            if (tfLoaded && window.tf && window.cocoSsd) return true;
+            setActiveStep('runtime');
+            try {
+                await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+                await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js');
+                if (!window.tf || !window.cocoSsd) throw new Error('TensorFlow.js resources not available');
+                tfLoaded = true;
+                updateLoadingStep('runtime', true);
+                return true;
+            } catch (err) {
+                console.error('TF.js load failed:', err);
+                throw new Error('Failed to load TensorFlow.js from CDN. Please check your internet connection and try again.');
+            }
+        }
+
+        async function loadModel() {
+            setActiveStep('model');
+            try {
+                model = await window.cocoSsd.load({ base: 'lite_mobilenet_v2' });
+                updateLoadingStep('model', true);
+                return model;
+            } catch (err) {
+                console.error('Model load failed:', err);
+                throw new Error('Failed to load the COCO-SSD model. The model files may be unavailable.');
+            }
+        }
+
+        async function initCamera() {
+            setActiveStep('camera');
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } },
+                    audio: false,
+                });
+                video.srcObject = stream;
+                await video.play();
+                await new Promise((resolve) => {
+                    video.onloadeddata = () => resolve();
+                    if (video.readyState >= 3) resolve();
+                });
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 480;
+                updateLoadingStep('camera', true);
+                return true;
+            } catch (err) {
+                console.error('Camera init failed:', err);
+                let msg = 'Camera access failed. ';
+                if (err.name === 'NotAllowedError') msg = 'Camera permission was denied. Please allow camera access in your browser settings.';
+                else if (err.name === 'NotFoundError') msg = 'No camera was found on this device.';
+                else if (err.name === 'NotReadableError') msg = 'The camera is busy or unavailable.';
+                else if (err.name === 'SecurityError') msg = 'Camera access requires a secure context (HTTPS or localhost).';
+                else msg += err.message || 'Unknown error.';
+                throw new Error(msg);
+            }
+        }
+
+        function computeVideoDisplayRect() {
+            const viewport = $('#camera-viewport');
+            if (!viewport || !video.videoWidth) return { x: 0, y: 0, width: canvas.width, height: canvas.height };
+            const rect = viewport.getBoundingClientRect();
+            const videoAspect = video.videoWidth / video.videoHeight;
+            const rectAspect = rect.width / rect.height;
+            let displayWidth, displayHeight, offsetX, offsetY;
+            if (videoAspect > rectAspect) {
+                displayWidth = rect.width;
+                displayHeight = rect.width / videoAspect;
+                offsetX = 0;
+                offsetY = (rect.height - displayHeight) / 2;
+            } else {
+                displayHeight = rect.height;
+                displayWidth = rect.height * videoAspect;
+                offsetY = 0;
+                offsetX = (rect.width - displayWidth) / 2;
+            }
+            return { x: offsetX, y: offsetY, width: displayWidth, height: displayHeight };
+        }
+
+        function drawPredictions(predictions) {
+            if (!ctx || !canvas.width) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const displayRect = computeVideoDisplayRect();
+            const scaleX = canvas.width / (displayRect.width || 1);
+            const scaleY = canvas.height / (displayRect.height || 1);
+            const offsetX = displayRect.x * scaleX;
+            const offsetY = displayRect.y * scaleY;
+            predictions.forEach(pred => {
+                const [x, y, w, h] = pred.bbox;
+                const mappedX = x * scaleX + offsetX;
+                const mappedY = y * scaleY + offsetY;
+                const mappedW = w * scaleX;
+                const mappedH = h * scaleY;
+                const label = `${pred.class} ${Math.round(pred.score * 100)}%`;
+                ctx.strokeStyle = '#3B82F6';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(mappedX, mappedY, mappedW, mappedH);
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.85)';
+                ctx.font = '12px monospace';
+                const textY = mappedY > 18 ? mappedY - 6 : mappedY + 14;
+                ctx.fillText(label, mappedX, textY);
+            });
+        }
+
+        async function inferenceLoop() {
+            if (!inferenceRunning || !model || !video.srcObject) return;
+            if (inferencePaused) return;
+
+            const frameStart = performance.now();
+            try {
+                const predictions = await model.detect(video);
+                const frameEnd = performance.now();
+                const inferenceTime = frameEnd - frameStart;
+                lastPredictions = predictions;
+                drawPredictions(predictions);
+                framesAnalyzed++;
+                metricFrames.textContent = String(framesAnalyzed);
+                const uniqueObjects = new Set(predictions.map(p => p.class));
+                metricObjects.textContent = predictions.length > 0 ? `${predictions.length} (${Array.from(uniqueObjects).join(', ').slice(0, 40)})` : '0';
+                inferenceTimeSum += inferenceTime;
+                inferenceTimeCount++;
+                metricInferenceTime.textContent = `${inferenceTime.toFixed(1)} ms`;
+                if (lastFrameTime > 0) {
+                    const fps = 1000 / (frameEnd - lastFrameTime);
+                    metricFps.textContent = fps.toFixed(1);
+                }
+                lastFrameTime = frameEnd;
+            } catch (err) {
+                console.error('Inference error:', err);
+            }
+
+            if (inferenceRunning && !inferencePaused) {
+                animationFrameId = requestAnimationFrame(inferenceLoop);
+            }
+        }
+
+        async function startInference() {
+            if (!model || !stream) return;
+            inferenceRunning = true;
+            inferencePaused = false;
+            detectionActive = true;
+            framesAnalyzed = 0;
+            lastFrameTime = 0;
+            inferenceTimeSum = 0;
+            inferenceTimeCount = 0;
+            setDemoState('running');
+            inferenceLoop();
+        }
+
+        function pauseInference() {
+            if (inferenceRunning) {
+                inferencePaused = true;
+                setDemoState('paused');
+            }
+        }
+
+        function resumeInference() {
+            if (inferencePaused) {
+                inferencePaused = false;
+                setDemoState('running');
+                inferenceLoop();
+            }
+        }
+
+        function syncCanvasToVideo() {
+            if (video.videoWidth) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            }
+        }
+
+        window.addEventListener('resize', debounce(syncCanvasToVideo, 150));
+
+        btnEnableCamera.addEventListener('click', async () => {
+            clearError();
+            resetLoadingSteps();
+            setDemoState('loading');
+            loadingSteps.style.display = 'flex';
+            try {
+                await loadTensorFlowResources();
+                setActiveStep('model');
+                await loadModel();
+                setActiveStep('camera');
+                await initCamera();
+                setActiveStep('inference');
+                updateLoadingStep('inference', true);
+                setActiveStep('ready');
+                updateLoadingStep('ready', true);
+                loadingSteps.style.display = 'none';
+                setDemoState('ready');
+            } catch (err) {
+                console.error('Enable camera flow failed:', err);
+                showError(err.message || 'Failed to initialize. Please try again.');
+                loadingSteps.style.display = 'none';
+            }
+        });
+
+        btnNoCamera.addEventListener('click', () => {
+            clearError();
+            setDemoState('simulated');
+            demoSimLabel.style.display = 'inline-block';
+            cameraOverlay.classList.remove('hidden');
+            cameraOverlay.innerHTML = `
+                <span class="co-icon" aria-hidden="true">📊</span>
+                <h4>CONCEPT SIMULATION</h4>
+                <p>This is an illustrative simulation of Edge AI architecture — not live inference.</p>
+                <div style="margin-top:12px;font-family:var(--font-mono);font-size:0.8rem;color:var(--text-secondary);text-align:center;line-height:1.8;">
+                    Device<br><span style="color:var(--accent)">↓</span><br>Local AI Model<br><span style="color:var(--accent)">↓</span><br>Prediction
+                </div>
+                <span class="simulation-label" style="margin-top:12px;">ILLUSTRATIVE SIMULATION — NOT LIVE AI INFERENCE</span>
+            `;
+            metricCamera.textContent = '—';
+            metricCameraNote.textContent = 'Simulated';
+        });
+
+        btnStart.addEventListener('click', () => {
+            if (demoState === 'ready' || demoState === 'paused') startInference();
+        });
+        btnPause.addEventListener('click', pauseInference);
+        btnResume.addEventListener('click', resumeInference);
+        btnStop.addEventListener('click', stopAll);
+        btnReset.addEventListener('click', resetDemo);
+        btnRetry.addEventListener('click', () => {
+            resetDemo();
+            btnEnableCamera.click();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            stopAll();
+        });
+
+        updateDemoUI();
+
+        // ============ DEMO MODE (PRESENTATION) ============
+        const demoModeOverlay = $('#demo-mode-overlay');
+        const dmBody = $('#dm-body');
+        const dmSlideLabel = $('#dm-slide-label');
+        const dmSlideTitle = $('#dm-slide-title');
+        const dmSlideContent = $('#dm-slide-content');
+        const dmProgress = $('#dm-progress');
+        const dmPrev = $('#dm-prev');
+        const dmNext = $('#dm-next');
+        const dmExit = $('#dm-exit');
+        const floatingDemoBtn = $('#floating-demo-btn');
+
+        const demoSlides = [
+            { label: 'What is Edge AI?', title: 'INTELLIGENCE, WHERE DATA HAPPENS.', content: '<p>Edge AI brings machine intelligence closer to the devices creating the data — enabling responsive, resilient and privacy-aware intelligent experiences without requiring every inference to travel to the cloud.</p>' },
+            { label: 'Cloud vs Edge', title: 'TWO ARCHITECTURES, ONE GOAL.', content: '<p><strong>Cloud AI</strong> sends data to remote infrastructure for processing. <strong>Edge AI</strong> moves appropriate inference closer to the source. Sometimes the best architecture is <strong>both</strong>.</p>' },
+            { label: 'Live AI', title: 'SEE EDGE AI THINK LOCALLY.', content: '<p>Run a real computer-vision model directly in your browser. The live demo uses <strong>TensorFlow.js</strong> and <strong>COCO-SSD</strong> to perform object detection on your webcam feed — all locally, on your device.</p>' },
+            { label: 'Why Edge AI?', title: 'SPEED · PRIVACY · RESILIENCE · EFFICIENCY', content: '<p>Processing closer to the source can reduce dependence on remote round trips, keep sensitive data local, maintain function during connectivity loss, and reduce unnecessary data movement — depending on the workload.</p>' },
+            { label: 'Architecture', title: 'FROM SENSOR TO INTELLIGENCE', content: '<p>Data flows from sensors through preprocessing, AI inference, decision, and action — all on the edge device. Cloud infrastructure can still support training, analytics, storage, model management, and heavier workloads.</p>' },
+            { label: 'Applications', title: 'EDGE AI IN THE REAL WORLD', content: '<p>Smart cameras, robotics, drones, vehicles, industrial IoT, healthcare wearables, agriculture, smartphones, energy systems, and smart homes — each with unique data, local AI tasks, and benefits.</p>' },
+            { label: 'Edge + Cloud', title: 'EDGE + CLOUD > EDGE VS CLOUD', content: '<p>Edge AI does not eliminate the cloud. It changes where appropriate computation happens. Edge handles local inference and fast response; cloud handles training, analytics, storage, and fleet coordination.</p>' },
+            { label: 'Future', title: 'A WORLD WHERE INTELLIGENCE IS EVERYWHERE', content: '<p>People, devices, sensors, edge intelligence, cloud intelligence, and connected systems working together — a distributed intelligence fabric across the world.</p>' },
+        ];
+
+        let dmIndex = 0;
+        let dmActive = false;
+
+        function updateDemoModeSlide() {
+            const slide = demoSlides[dmIndex];
+            dmSlideLabel.textContent = slide.label;
+            dmSlideTitle.textContent = slide.title;
+            dmSlideContent.innerHTML = slide.content;
+            dmProgress.textContent = `${String(dmIndex + 1).padStart(2, '0')} / ${String(demoSlides.length).padStart(2, '0')}`;
+            dmPrev.disabled = dmIndex === 0;
+            dmNext.disabled = dmIndex === demoSlides.length - 1;
+        }
+
+        function openDemoMode() {
+            dmActive = true;
+            dmIndex = 0;
+            demoModeOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            updateDemoModeSlide();
+        }
+
+        function closeDemoMode() {
+            dmActive = false;
+            demoModeOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function demoModeNext() {
+            if (dmIndex < demoSlides.length - 1) {
+                dmIndex++;
+                updateDemoModeSlide();
+            }
+        }
+
+        function demoModePrev() {
+            if (dmIndex > 0) {
+                dmIndex--;
+                updateDemoModeSlide();
+            }
+        }
+
+        floatingDemoBtn.addEventListener('click', openDemoMode);
+        dmExit.addEventListener('click', closeDemoMode);
+        dmNext.addEventListener('click', demoModeNext);
+        dmPrev.addEventListener('click', demoModePrev);
+
+        document.addEventListener('keydown', (e) => {
+            if (!dmActive) return;
+            switch (e.key) {
+                case 'ArrowLeft': e.preventDefault(); demoModePrev(); break;
+                case 'ArrowRight': e.preventDefault(); demoModeNext(); break;
+                case ' ': e.preventDefault(); demoModeNext(); break;
+                case 'Escape': e.preventDefault(); closeDemoMode(); break;
+                case 'Home': e.preventDefault(); dmIndex = 0; updateDemoModeSlide(); break;
+                case 'End': e.preventDefault(); dmIndex = demoSlides.length - 1; updateDemoModeSlide(); break;
+            }
+        });
+
+        // ============ HERO CTA SMOOTH SCROLL ============
+        $$('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetEl = document.querySelector(targetId);
+                if (targetEl) {
+                    e.preventDefault();
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        console.log('EDGE AI prototype ready. Live demo: enable camera for real local inference.');
+    </script>
+</body>
+</html>
