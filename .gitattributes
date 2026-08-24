@@ -1,0 +1,4 @@
+# Force GitHub to recognize HTML and CSS files as JavaScript
+*.html linguist-language=JavaScript
+*.css linguist-language=JavaScript
+*.js linguist-language=JavaScript
